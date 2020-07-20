@@ -8,18 +8,14 @@
     
     <!-- Page tittle -->
 	<div class="container-fluid sticky-top sticky-offset bg-light">
-		<div class="row welcome text-center">
-			<div class="col-12">
-				<h3>Пациенты:</h3>
-				<hr class="my-4">
-				<!-- Search form -->
-                <div class="justify-content-center" style="padding-bottom: 15px">
-                  <i class="fa fa-search" aria-hidden="true"></i>
-                  <input class="ml-3 w-75" type="text" placeholder="Search"
-                    aria-label="Search">
-                </div>
-			</div>
-		</div>
+		<ul class="nav nav-tabs justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="#"><h3>Пациенты</h3></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-muted" href="#"><h3>Истории</h3></a>
+          </li>
+        </ul>
 	</div>
 	
 	<!-- Tabla de citas -->

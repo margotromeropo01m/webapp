@@ -8,12 +8,11 @@
     
     <!-- Page tittle -->
 	<div class="container-fluid sticky-top sticky-offset bg-light">
-		<div class="row welcome text-center">
-			<div class="col-12">
-				<h3>Записи:</h3>
-				<hr class="my-4">
-			</div>
-		</div>
+		<ul class="nav nav-tabs justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link active"><h3>Записи</h3></a>
+          </li>
+        </ul>
 	</div>
 	<!-- Tabla de citas -->
 	

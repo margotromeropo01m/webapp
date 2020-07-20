@@ -22,7 +22,7 @@
 	</div>
 	<!-- Tabla de citas -->
 	
-     <div class="wrapper">
+	<div class="wrapper">
       <div class="card">
         <div class="card-header" id="headingOne">
           <h3 class="mb-0">
@@ -38,33 +38,23 @@
             <div class="row">
             	<div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                    	<label for="cedula_usuarios" class="control-label">Название продцедура:</label>
+                    	<label for="cedula_usuarios" class="control-label">Название зоны:</label>
                         <input type="text" class="form-control" id="cedula_usuarios" name="cedula_usuarios" value=""  placeholder="Название">
                         <div id="mensaje_cedula_usuarios" class="errores"></div>
                      </div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                    	<label for="cedula_usuarios" class="control-label">Ппродолжительность (в минутах):</label>
-                        <input type="text" class="form-control" id="cedula_usuarios" name="cedula_usuarios" value=""  placeholder="продолжительность (минуты)">
-                        <div id="mensaje_cedula_usuarios" class="errores"></div>
-                     </div>
-                 </div>
-                 <div class="col-xs-6 col-md-3 col-lg-3 ">
-                	<div class="form-group">
-                    	<label for="cedula_usuarios" class="control-label">Стоитмость процедура:</label>
+                    	<label for="cedula_usuarios" class="control-label">Стоитмость:</label>
                         <input type="text" class="form-control" id="cedula_usuarios" name="cedula_usuarios" value=""  placeholder="Стоитмость">
                         <div id="mensaje_cedula_usuarios" class="errores"></div>
                      </div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
-                	<div class="form-group">
-                    	<label for="cedula_usuarios" class="control-label">Вид продцедура:</label>
-                         <select name="id_estado" id="id_estado"  class="form-control" >
-                             <option value="0" selected="selected">--Выбрать--</option>		
-    					  </select> 
-                        <div id="mensaje_cedula_usuarios" class="errores"></div>
-                     </div>
+                	
+                 </div>
+                 <div class="col-xs-6 col-md-3 col-lg-3 ">
+                	
                  </div>
             </div>
             <div class="row">
@@ -81,7 +71,7 @@
       <div class="card">
         <div class="card-header" id="headingOne">
           <h3 class="mb-0">
-          	Процедуры
+          	Зоны
             <button class="btn float-right" data-toggle="collapse" data-target="#collapseTable" aria-expanded="false" aria-controls="collapseTable">
               <i class="fa fa-caret-square-o-up fa-lg"></i>
             </button>
@@ -98,12 +88,7 @@
                 	
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
-                	<div class="form-group">
-                         <select name="id_estado" id="id_estado"  class="form-control" >
-                             <option value="0" selected="selected">--Выбрать вид продцедура:--</option>		
-    					  </select> 
-                        <div id="mensaje_cedula_usuarios" class="errores"></div>
-                     </div>
+                	
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
@@ -116,13 +101,12 @@
         </div>
       </div>
      </div>
-      
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="bootstrap/jquery-3.5.1.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script src="view/js/Procedures.js?0.1" ></script>
+    <script src="view/js/Zones.js?0.1"></script>
   </body>
 </html>

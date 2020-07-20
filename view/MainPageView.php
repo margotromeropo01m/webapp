@@ -8,12 +8,11 @@
     
     <!-- Page tittle -->
 	<div class="container-fluid sticky-top sticky-offset bg-light">
-		<div class="row welcome text-center">
-			<div class="col-12">
-				<h3>На сегодня:</h3>
-				<hr class="my-4">
-			</div>
-		</div>
+		<ul class="nav nav-tabs justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="#"><h3>На сегодня</h3></a>
+          </li>
+        </ul>
 		<div class="row">
             <div class="col-md-12">
               <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-white">

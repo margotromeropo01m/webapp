@@ -1,5 +1,5 @@
 <?php 
-class ProceduresController extends ControladorBase{
+class ZonesController extends ControladorBase{
     
     public function __construct() {
         parent::__construct();
@@ -8,9 +8,9 @@ class ProceduresController extends ControladorBase{
     public function index(){
         
         $pageName="Procedures";
-        $tabName="Procedures";
+        $tabName="Zones";
         
-        $this->view("Procedures",array("pageName"=>$pageName, "tabName"=>$tabName));
+        $this->view("Zones",array("pageName"=>$pageName, "tabName"=>$tabName));
         
     }
     
