@@ -45,8 +45,8 @@
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                    	<label for="cedula_usuarios" class="control-label">Ппродолжительность (в минутах):</label>
-                        <input type="text" class="form-control" id="cedula_usuarios" name="cedula_usuarios" value=""  placeholder="продолжительность (минуты)">
+                    	<label for="cedula_usuarios" class="control-label">Продолжительность (в минутах):</label>
+                        <input type="text" class="form-control" id="cedula_usuarios" name="cedula_usuarios" value=""  placeholder="Продолжительность (минуты)">
                         <div id="mensaje_cedula_usuarios" class="errores"></div>
                      </div>
                  </div>
