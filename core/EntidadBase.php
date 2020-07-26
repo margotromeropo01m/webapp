@@ -280,8 +280,9 @@ class EntidadBase{
     public function getCondicionesPag($columnas ,$tablas , $where, $id, $limit){
     	 
     	$query=mysqli_query($this->con, "SELECT $columnas FROM $tablas WHERE $where ORDER BY $id  ASC  $limit");
+    	
     	$resultSet = array();
-    	while ($row = mysqli_fetch_array($query)) {
+    	while ($row = mysqli_fetch_array($query, MYSQLI_BOTH)) {
     		$resultSet[]=$row;
     	}
     

@@ -106,18 +106,17 @@
                 	
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
-                	<div class="form-group">
-                         <select name="id_estado" id="id_estado"  class="form-control" >
-                             <option value="0" selected="selected">--Выбрать вид продцедура:--</option>		
-    					  </select> 
-                        <div id="mensaje_cedula_usuarios" class="errores"></div>
-                     </div>
+                	
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                        <input type="text" class="form-control" id="cedula_usuarios" name="cedula_usuarios" value=""  placeholder="Пойск">
-                        <div id="mensaje_cedula_usuarios" class="errores"></div>
+                        <input type="text" class="form-control" id="patientSearch" name="cedula_usuarios" value="" onkeyup="loadPatients(1)"  placeholder="Пойск">
                      </div>
+                 </div>
+            </div>
+            <div class="row">
+            	<div class="col-xs-12 col-md-12 col-lg-12 ">
+                	<div id="patients_table"></div>
                  </div>
             </div>
           </div>
@@ -131,6 +130,6 @@
     <script src="bootstrap/jquery.mask.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script src="view/js/Patients.js?0.4"></script>
+    <script src="view/js/Patients.js?0.6"></script>
   </body>
 </html>

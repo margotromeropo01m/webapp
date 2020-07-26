@@ -16,7 +16,60 @@ $(document).ready(function () {
                 });
             
             $('#patient-phone').mask('+7-(000)-000-00-00')
+            
+            loadPatients(1)
         });
+
+function formatNumber(number)
+{
+	var format = "+7-(XXX)-XXX-XX-XX"
+	var res	
+		for(var i = 0; i<number.length; i++)
+			{
+			 res=format.replace(/X/, number.charAt(i))
+			 format = res
+			}
+	var x = format.indexOf("X")
+	if (x==-1) x=format.length
+	var newFormat = ""
+	for (var i = 0; i<x; i++)
+		{
+		 newFormat += format.charAt(i)
+		 
+		}
+	return newFormat
+}
+
+function loadPatients(page)
+{
+	console.log("loadPatients")
+	var search = $("#patientSearch").val()
+	
+	var firstChar = search.charAt(0)
+	
+	if( firstChar <='9' && firstChar >='0') {
+      
+		
+		console.log(search)
+		search = formatNumber(search)
+	}
+	
+	$.ajax({
+	    url: 'index.php?controller=Patients&action=GetPatients',
+	    type: 'POST',
+	    data: {
+	    	search:search,
+	    	page:page
+	    },
+	})
+	.done(function(x) {
+		x=x.trim()
+		$('#patients_table').html(x)	
+	})
+	.fail(function() {
+	    console.log("error");
+	});
+}
 
 function savePatient()
 {
@@ -49,7 +102,22 @@ function savePatient()
 		    },
 		})
 		.done(function(x) {
-			console.log(x);
+			x=x.trim()
+			console.log("respuesta del servidor -> " +x)
+			if(x=="2")
+				{
+				var message="Пациент уже зарегистрирован!"
+				failAlert(message)
+				}
+			else if (x=="1")
+				{
+				successAlert()
+				}
+			else
+				{
+				var message="Произошла ошибка!"
+					failAlert(message)
+				}
 			
 			
 		})
@@ -57,10 +125,7 @@ function savePatient()
 		    console.log("error");
 		});
 	 }
- 
- 
- 
-
+  
 }
 
 function cancelPatient()
@@ -80,10 +145,8 @@ function closeAlertPatients()
 
 function successAlert()
 {
-	$("#alert-patients")
-	.find(".alert-danger")
-    .removeClass("alert-danger")
-    .addClass("alert-success");
+	$("#alert-patients").removeClass("alert-danger")
+    $("#alert-patients").addClass("alert-success");
 	
 	var alertMessage="Пациент довабился успешно!"
 	 $("#alert-message-patients").html(alertMessage)
@@ -92,15 +155,13 @@ function successAlert()
 	
 }
 
-function failAlert()
+function failAlert(message)
 {
-	$("#alert-patients")
-	.find(".alert-success")
-    .removeClass("alert-success")
-    .addClass("alert-danger");
 	
-	var alertMessage="Ошибка довабления!"
-	 $("#alert-message-patients").html(alertMessage)
+    $("#alert-patients").removeClass("alert-success")
+    $("#alert-patients").addClass("alert-danger");
+	
+	 $("#alert-message-patients").html(message)
 	
 	 $("#alert-patients").fadeTo(500,500)
 	
