@@ -44,25 +44,25 @@
             <div class="row">
             	<div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                    	<label for="patient-name" class="control-label">Имя:</label>
+                    	<label class="control-label">Фамилия:</label>
+                        <input type="text" class="form-control" id="patient-surname" value=""  placeholder="Фамилия">
+                     </div>
+                 </div>
+                 <div class="col-xs-6 col-md-3 col-lg-3 ">
+                 	<div class="form-group">
+                    	<label class="control-label">Имя:</label>
                         <input type="text" class="form-control" id="patient-name" value=""  placeholder="Имя">
                      </div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                    	<label for="patient-surname" class="control-label">Фамилия:</label>
-                        <input type="text" class="form-control" id="patient-surname" value=""  placeholder="Фамилия">
-                     </div>
-                 </div>
-                 <div class="col-xs-6 col-md-3 col-lg-3 ">
-                	<div class="form-group">
-                    	<label for="cedula_usuarios" class="control-label">Отчество:</label>
+                    	<label class="control-label">Отчество:</label>
                         <input type="text" class="form-control" id="patient-patronimic" value=""  placeholder="Отчество">
                      </div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                    	<label for="cedula_usuarios" class="control-label">Дата рождения:</label>
+                    	<label class="control-label">Дата рождения:</label>
                           <input class="form-control" type="date" value="" id="patient-birthday">
                      </div>
                  </div>
@@ -130,6 +130,6 @@
     <script src="bootstrap/jquery.mask.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script src="view/js/Patients.js?0.6"></script>
+    <script src="view/js/Patients.js?0.7"></script>
   </body>
 </html>

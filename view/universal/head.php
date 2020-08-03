@@ -12,6 +12,9 @@
     	.sticky-offset {
         top: 56px;
         }
+        
+        <?php if ($pageName == "Appointments") {include("view/universal/appointments_css.php");}?>
+        
 	</style>
     <title>Клиника</title>
   </head>

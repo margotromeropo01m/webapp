@@ -42,15 +42,12 @@ function formatNumber(number)
 
 function loadPatients(page)
 {
-	console.log("loadPatients")
 	var search = $("#patientSearch").val()
 	
 	var firstChar = search.charAt(0)
 	
 	if( firstChar <='9' && firstChar >='0') {
       
-		
-		console.log(search)
 		search = formatNumber(search)
 	}
 	
@@ -84,9 +81,8 @@ function savePatient()
  if(name=="" || surname=="" || patronimic=="" ||
 		 birthday=="" || phone=="")
 	 {
-	 var alertMessage="Пожалуйста заполните все данные!"
-		 $("#alert-message-patients").html(alertMessage)
-		 $("#alert-patients").fadeTo(500,500)
+	 var message="Пожалуйста заполните все данные!"
+		 failAlert(message)
 	 }
  else
 	 {
@@ -112,6 +108,8 @@ function savePatient()
 			else if (x=="1")
 				{
 				successAlert()
+				clearFields()
+				loadPatients(1)
 				}
 			else
 				{
@@ -128,13 +126,18 @@ function savePatient()
   
 }
 
-function cancelPatient()
+function clearFields()
 {
 	$("#patient-name").val("")
 	$("#patient-surname").val("")
 	$("#patient-patronimic").val("")
 	$("#patient-birthday").val("")
 	$("#patient-phone").val("")
+}
+
+function cancelPatient()
+{
+	clearFields()
 	closeAlertPatients()
 }
 

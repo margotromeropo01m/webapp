@@ -217,7 +217,9 @@ class EntidadBase{
     public function getCondiciones($columnas ,$tablas , $where, $id){
     	
     	$query=mysqli_query($this->con, "SELECT $columnas FROM $tablas WHERE $where ORDER BY $id  ASC");
+    	//echo "SELECT $columnas FROM $tablas WHERE $where ORDER BY $id  ASC";
     	$resultSet = array();
+    	
     	while ($row = mysqli_fetch_array($query)) {
     		$resultSet[]=$row;
     	}

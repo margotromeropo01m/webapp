@@ -88,7 +88,7 @@ class PatientsController extends ControladorBase{
             $cantidadResult=(int)$resultSet[0]['total'];
             
             
-            $page = (isset($_POSTT['page']) && !empty($_POST['page']))?$_POST['page']:1;
+            $page = (isset($_POST['page']) && !empty($_POST['page']))?$_POST['page']:1;
             
             $per_page = 10; //la cantidad de registros que desea mostrar
             $adjacents  = 9; //brecha entre páginas después de varios adyacentes
@@ -112,7 +112,7 @@ class PatientsController extends ControladorBase{
                 $html.='</div>';
                 $html.='<div class="col-lg-12 col-md-12 col-xs-12">';
                 $html.='<section>';
-                $html.= "<table id='patients_table' class='table table-striped'>";
+                $html.= "<table id='patients_table_show' class='table table-striped'>";
                 $html.= "<thead>";
                 $html.= "<tr>";
                 $html.='<th></th>';

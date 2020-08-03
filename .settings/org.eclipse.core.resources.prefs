@@ -1,12 +1,14 @@
 eclipse.preferences.version=1
+encoding//controller/ExtrasController.php=UTF-8
 encoding//controller/PatientsController.php=UTF-8
+encoding//controller/ProceduresController.php=UTF-8
 encoding//view/AppointmentsView.php=UTF-8
+encoding//view/ExtrasView.php=UTF-8
 encoding//view/MainPageView.php=UTF-8
 encoding//view/PatientsView.php=UTF-8
 encoding//view/PreparatsView.php=UTF-8
 encoding//view/ProceduresView.php=UTF-8
 encoding//view/ReportsView.php=UTF-8
-encoding//view/ZonesView.php=UTF-8
 encoding//view/universal/head.php=UTF-8
 encoding//view/universal/navbar.php=UTF-8
 encoding//view/universal/navmenu.php=UTF-8

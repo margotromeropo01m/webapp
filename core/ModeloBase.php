@@ -235,13 +235,13 @@ class ModeloBase extends EntidadBase{
             $result=mysqli_query($this->con(), $query);
             
             if( $result === false )
-                throw new Exception( "Error MySQL ".mysqli_error() );
+                throw new Exception( "Error MySQL ".mysqli_error($this->con()) );
                 
                 $resultSet = mysqli_affected_rows($this->con());
                 
         }catch (Exception $Ex){
             
-            $resultSet=-1;
+            $resultSet=$Ex;
         }
         
         return $resultSet;
