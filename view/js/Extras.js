@@ -40,16 +40,444 @@ function getProceduresTable()
 		});
 }
 
+
+function changeTable()
+{
+	 var button_set = '<button type="button" class="btn btn-warning" onclick="editTable()"><i class="fa fa-pencil"></i></button>'
+		 $("#edit_button").html(button_set)
+		 getProceduresTable()
+		 document.getElementById("search_procedure").onkeyup = function() {getProceduresTable()};
+		 document.getElementById("procedure_type_search").onchange = function() {getProceduresTable()};
+}
+
+function editTable()
+{
+ var button_set = '<button type="button" class="btn btn-success" onclick="changeTable()"><i class="fa fa-check"></i></button>'
+	 $("#edit_button").html(button_set)
+	 var search = $("#search_procedure").val()
+	 var type = $("#procedure_type_search").val()
+	 document.getElementById("search_procedure").onkeyup = function() {editTable()};
+	 document.getElementById("procedure_type_search").onchange = function() {editTable()};
+	 
+	 
+	 $.ajax({
+		    url: 'index.php?controller=Procedures&action=GetProceduresTableEditable',
+		    type: 'POST',
+		    data: {
+		    	search:search,
+		    	type:type
+		    },
+		})
+		.done(function(x) {
+			x=x.trim()
+			$('#procedures_table').html(x)	
+		})
+		.fail(function() {
+		    console.log("error");
+		});
+}
+
+function EditProcedureWOE(id_procedure)
+{
+	
+	var set_fields = '<label class="control-label">Название:</label>'+
+						'<input type="text" class="form-control" id="procedure_new_name" placeholder="Название"/>'+
+						'<label class="control-label">Стоитмость:</label>'+
+						'<input type="number" class="form-control" id="procedure_new_cost" placeholder="Стоитмость"/>'+
+						'<label class="control-label">Продолжительность:</label>'+
+						'<input type="number" class="form-control" id="procedure_new_duration" placeholder="Продолжительность"/>'
+		
+	var buttons = '<button type="button" class="btn btn-primary" onclick="updateProcedureWOE('+id_procedure+')">Сохранить</button>'+
+					'<button type="button" class="btn btn-danger" onclick="cancelModal()">Отменить</button>'
+	
+	$("#settings_modal").html(set_fields)
+	$("#settings_footer").html(buttons)
+	
+	$.ajax({
+		    url: 'index.php?controller=Procedures&action=getProcedureInfoWOE',
+		    type: 'POST',
+		    data: {
+		    	procedure_id:id_procedure
+		    },
+		})
+		.done(function(x) {
+			x=JSON.parse(x)
+			
+			$("#procedure_new_name").val(x[0]['nombre_procedimientos'])
+			$("#procedure_new_cost").val(x[0]['precio_procedimientos'])
+			$("#procedure_new_duration").val(x[0]['duracion_procedimientos'])
+			$("#procedure_settings").modal('show')
+		})
+		.fail(function() {
+		    console.log("error");
+		});
+	
+	
+}
+
+function EditExtra(id_procedure)
+{
+	
+	var set_fields = '<label class="control-label">Название:</label>'+
+						'<input type="text" class="form-control" id="procedure_new_name" placeholder="Название"/>'+
+						'<label class="control-label">Стоитмость:</label>'+
+						'<input type="number" class="form-control" id="procedure_new_cost" placeholder="Стоитмость"/>'+
+						'<label class="control-label">Продолжительность:</label>'+
+						'<input type="number" class="form-control" id="procedure_new_duration" placeholder="Продолжительность"/>'
+		
+	var buttons = '<button type="button" class="btn btn-primary" onclick="updateExtra('+id_procedure+')">Сохранить</button>'+
+					'<button type="button" class="btn btn-danger" onclick="cancelModal()">Отменить</button>'
+	
+	$("#settings_modal").html(set_fields)
+	$("#settings_footer").html(buttons)
+	
+	$.ajax({
+		    url: 'index.php?controller=Procedures&action=getProcedureInfoExtra',
+		    type: 'POST',
+		    data: {
+		    	procedure_id:id_procedure
+		    },
+		})
+		.done(function(x) {
+			x=JSON.parse(x)
+			
+			$("#procedure_new_name").val(x[0]['nombre_especificaciones_procedimientos'])
+			$("#procedure_new_cost").val(x[0]['costo_especificaciones_procedimientos'])
+			$("#procedure_new_duration").val(x[0]['duracion_especificaciones_procedimientos'])
+			$("#procedure_settings").modal('show')
+		})
+		.fail(function() {
+		    console.log("error");
+		});
+	
+	
+}
+
+function EditProcedureWE(id_procedure)
+{
+	var set_fields = '<label class="control-label">Название:</label>'+
+	'<input type="text" class="form-control" id="procedure_new_name" placeholder="Название"/>'
+
+	var buttons = '<button type="button" class="btn btn-primary" onclick="updateProcedureWE('+id_procedure+')">Сохранить</button>'+
+	'<button type="button" class="btn btn-danger" onclick="cancelModal()">Отменить</button>'
+	
+	$("#settings_modal").html(set_fields)
+	$("#settings_footer").html(buttons)
+	
+	$.ajax({
+	url: 'index.php?controller=Procedures&action=getProcedureInfoWE',
+	type: 'POST',
+	data: {
+	procedure_id:id_procedure
+	},
+	})
+	.done(function(x) {
+	
+	$("#procedure_new_name").val(x)
+	$("#procedure_settings").modal('show')
+	})
+	.fail(function() {
+	console.log("error");
+	});
+		
+	
+}
+
+function updateProcedureWOE(id_procedure)
+{
+	var name = $("#procedure_new_name").val()
+	var cost = $("#procedure_new_cost").val()
+	var duration = $("#procedure_new_duration").val()
+	
+	if (name == "" || cost == "" || duration == "")
+		{
+	
+		Swal.fire({
+				  icon: 'warning',
+				  title: 'Внимание',
+				  text: 'Запольните все данные'
+				})
+		}
+	else
+		{
+		$.ajax({
+			url: 'index.php?controller=Procedures&action=UpdateProcedureWOE',
+			type: 'POST',
+			data: {
+			procedure_id:id_procedure,
+			procedure_name:name,
+			procedure_cost:cost,
+			procedure_duration:duration
+			},
+			})
+			.done(function(x) {
+			 if(x == 1)
+				 {
+				 Swal.fire({
+					  icon: 'success',
+					  title: 'Готово',
+					  text: 'Изменения сохранились'
+					})
+					editTable()
+					cancelModal()
+				 }
+			 else if (x==0)
+			 {
+			  alertMessages('info','Нет изменений','Информация')
+			  cancelModal()
+			 }
+			 else
+				 {
+					Swal.fire({
+						  icon: 'error',
+						  title: 'Ощибка',
+						  text: 'Произошла ошибка :'+x
+						})
+				 }
+			})
+			.fail(function() {
+			console.log("error");
+			});
+		}
+	
+}
+
+function updateExtra(id_procedure)
+{
+	var name = $("#procedure_new_name").val()
+	var cost = $("#procedure_new_cost").val()
+	var duration = $("#procedure_new_duration").val()
+	
+	if (name == "" || cost == "" || duration == "")
+		{
+	
+		Swal.fire({
+				  icon: 'warning',
+				  title: 'Внимание',
+				  text: 'Запольните все данные'
+				})
+		}
+	else
+		{
+		$.ajax({
+			url: 'index.php?controller=Procedures&action=UpdateProcedureExtra',
+			type: 'POST',
+			data: {
+			procedure_id:id_procedure,
+			procedure_name:name,
+			procedure_cost:cost,
+			procedure_duration:duration
+			},
+			})
+			.done(function(x) {
+			 if(x == 1)
+				 {
+				 Swal.fire({
+					  icon: 'success',
+					  title: 'Готово',
+					  text: 'Изменения сохранились'
+					})
+					editTable()
+					cancelModal()
+				 }
+			 else if (x==0)
+			 {
+			  alertMessages('info','Нет изменений','Информация')
+			  cancelModal()
+			 }
+			 else
+				 {
+					Swal.fire({
+						  icon: 'error',
+						  title: 'Ощибка',
+						  text: 'Произошла ошибка :'+x
+						})
+				 }
+			})
+			.fail(function() {
+			console.log("error");
+			});
+		}
+	
+}
+
+function updateProcedureWE(id_procedure)
+{
+	var name = $("#procedure_new_name").val()
+	
+	if (name == "")
+		{
+	
+		Swal.fire({
+				  icon: 'warning',
+				  title: 'Внимание',
+				  text: 'Запольните все данные'
+				})
+		}
+	else
+		{
+		$.ajax({
+			url: 'index.php?controller=Procedures&action=UpdateProcedureWE',
+			type: 'POST',
+			data: {
+			procedure_id:id_procedure,
+			procedure_name:name
+			},
+			})
+			.done(function(x) {
+			 if(x == 1)
+				 {
+				 Swal.fire({
+					  icon: 'success',
+					  title: 'Готово',
+					  text: 'Изменения сохранились'
+					})
+					editTable()
+					cancelModal()
+					getProcedures()
+				 }
+			 else if (x==0)
+				 {
+				  alertMessages('info','Нет изменений','Информация')
+				  cancelModal()
+				 }
+			 else
+				 {
+					Swal.fire({
+						  icon: 'error',
+						  title: 'Ощибка',
+						  text: 'Произошла ошибка :'+x
+						})
+				 }
+			})
+			.fail(function() {
+			console.log("error");
+			});
+		}
+	
+}
+
+function DeleteProcedureWOE(id_procedure)
+{
+	Swal.fire({
+		  title: 'Удаление процедуры',
+		  text: "Вы дейсвительно хотите удалить данную процедуру?",
+		  icon: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Удалить',
+		  cancelButtonText: 'Отменить'
+		}).then((result) => {
+		  if (result.value) {
+			  $.ajax({
+					url: 'index.php?controller=Procedures&action=DeleteProcedureWOE',
+					type: 'POST',
+					data: {
+					procedure_id:id_procedure
+					},
+					})
+					.done(function(x) {
+					 if(x == 1)
+						 {
+						 Swal.fire({
+							  icon: 'success',
+							  title: 'Готово',
+							  text: 'Изменения сохранились'
+							})
+							editTable()
+							cancelModal()
+						 }
+					 else if (x==0)
+						 {
+						  alertMessages('info','Нет изменений','Информация')
+						  cancelModal()
+						 }
+					 else
+						 {
+							Swal.fire({
+								  icon: 'error',
+								  title: 'Ощибка',
+								  text: 'Произошла ошибка :'+x
+								})
+						 }
+					})
+					.fail(function() {
+					console.log("error");
+					});
+		  }
+		})
+}
+
+function DeleteExtra(id_procedure)
+{
+	Swal.fire({
+		  title: 'Удаление процедуры',
+		  text: "Вы дейсвительно хотите удалить данную процедуру?",
+		  icon: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Удалить',
+		  cancelButtonText: 'Отменить'
+		}).then((result) => {
+		  if (result.value) {
+			  $.ajax({
+					url: 'index.php?controller=Procedures&action=DeleteExtra',
+					type: 'POST',
+					data: {
+					procedure_id:id_procedure
+					},
+					})
+					.done(function(x) {
+					 if(x == 1)
+						 {
+						 Swal.fire({
+							  icon: 'success',
+							  title: 'Готово',
+							  text: 'Изменения сохранились'
+							})
+							editTable()
+							cancelModal()
+						 }
+					 else if (x==0)
+						 {
+						  alertMessages('info','Нет изменений','Информация')
+						  cancelModal()
+						 }
+					 else
+						 {
+							Swal.fire({
+								  icon: 'error',
+								  title: 'Ощибка',
+								  text: 'Произошла ошибка :'+x
+								})
+						 }
+					})
+					.fail(function() {
+					console.log("error");
+					});
+		  }
+		})
+}
+
+function cancelModal()
+{
+	 $("#procedure_settings").modal('hide')
+}
+
 function saveProcedureExtra()
 {
  var name = $("#extra_name").val()
  var cost = $("#extra_cost").val()
  var id_procedure = $("#procedure_id").val()
+ var duration = $("#extra_duration").val()
  
- if(name=="" || cost=="" || id_procedure=="")
+ if(name=="" || cost=="" || id_procedure=="" || duration == "")
 	 {
 	 var message="Пожалуйста заполните все данные!"
-		 failAlert(message)
+		 
+		 alertMessages('warning',message, 'Внимание')
 	 }
  else
 	 {
@@ -59,7 +487,8 @@ function saveProcedureExtra()
 		    data: {
 		    	extra_name:name,
 		    	extra_cost:cost,
-		    	procedure_id:id_procedure
+		    	procedure_id:id_procedure,
+		    	extra_duration:duration
 		    },
 		})
 		.done(function(x) {
@@ -68,18 +497,19 @@ function saveProcedureExtra()
 			if(x=="2")
 				{
 				var message="Дополнение уже зарегистрировано!"
-				failAlert(message)
+					alertMessages('warning',message, 'Внимание')
 				}
 			else if (x=="1")
 				{
-				successAlert()
+				var message = "Дополнение зарегистрировано успешно!"
+				alertMessages('success',message, 'Готово')
 				clearFields()
 				getProceduresTable()
 				}
 			else
 				{
-				var message="Произошла ошибка!"
-					failAlert(message)
+				var message="Произошла ошибка!"+x
+					alertMessages('error',message, 'Ошибка')
 				}
 			
 			
@@ -103,6 +533,10 @@ function getProcedures()
 			x=JSON.parse(x)
 					
 		    select = document.getElementById('procedure_id');
+			
+			for (i = select.length - 1; i > 1; i--) {
+				select.remove(i);
+			}
 
 		for (var i = 0; i<x.length; i++){
 		    var opt = document.createElement('option');
@@ -133,20 +567,21 @@ function getProcedureInfo()
 			x=JSON.parse(x)
 			
 			 var input_type='<label  class="control-label">Вид дополнения:</label>'+
-	     		'<input type="text" class="form-control" id="extra_type" value="'+x[0]['nombre_tipo_procedimientos']+'"  readonly>'+
-	 			'<div id="mensaje_cedula_usuarios" class="errores"></div>'
+	     		'<input type="text" class="form-control" id="extra_type" value="'+x[0]['nombre_tipo_procedimientos']+'"  readonly>'
 	     		
      		var input_name='<label  class="control-label">Название дополнения:</label>'+
-     		'<input type="text" class="form-control" id="extra_name" value=""  placeholder="Название">'+
- 			'<div id="mensaje_cedula_usuarios" class="errores"></div>'
+     		'<input type="text" class="form-control" id="extra_name" value=""  placeholder="Название">'
 
      		var input_cost='<label  class="control-label">Стоитмость дополнения:</label>'+
-     		'<input type="number" class="form-control" id="extra_cost" value=""  placeholder="Стоитмость">'+
- 			'<div id="mensaje_cedula_usuarios" class="errores"></div>'
+     		'<input type="number" class="form-control" id="extra_cost" value=""  placeholder="Стоитмость">'
+     		
+     		var input_duration = '<label  class="control-label">Продолжительность дополнения:</label>'+
+     		'<input type="number" class="form-control" id="extra_duration" value=""  placeholder="Продолжительность">'
      		
      		$('#procedure_type_info').html(input_type)
      		$('#procedure_extra_name').html(input_name)
      		$('#procedure_extra_cost').html(input_cost)
+     		$('#procedure_extra_duration').html(input_duration)
 		    
 		
 		})
@@ -156,7 +591,10 @@ function getProcedureInfo()
 		}
 	else
 		{
-			$('#procedure_type_info').html("")
+			$('#procedure_type_info').html("")			
+     		$('#procedure_extra_name').html("")
+     		$('#procedure_extra_cost').html("")
+     		$('#procedure_extra_duration').html("")
 		}
 		
 }
@@ -166,40 +604,20 @@ function clearFields()
 	$('#procedure_type_info').html("")
 	$('#procedure_extra_name').html("")
 	$('#procedure_extra_cost').html("")
+	$('#procedure_extra_duration').html("")
 	$("#procedure_id").val("")
 }
 
 function cancelExtra()
 {
 	clearFields()
-	closeAlertProcedures()
 }
 
-function closeAlertProcedures()
+function alertMessages(tipo, mensaje, titulo)
 {
-	$("#alert-extras").slideUp(500)	
-}
-
-function successAlert()
-{
-	$("#alert-extras").removeClass("alert-danger")
-    $("#alert-extras").addClass("alert-success");
-	
-	var alertMessage="Дополнение довабилось успешно!"
-	 $("#alert-message-extras").html(alertMessage)
-	
-	 $("#alert-extras").fadeTo(500,500)
-	
-}
-
-function failAlert(message)
-{
-	
-    $("#alert-extras").removeClass("alert-success")
-    $("#alert-extras").addClass("alert-danger");
-	
-	 $("#alert-message-extras").html(message)
-	
-	 $("#alert-extras").fadeTo(500,500)
-	
+	Swal.fire({
+		  icon: tipo,
+		  title: titulo,
+		  text: mensaje
+		})
 }

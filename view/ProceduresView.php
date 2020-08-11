@@ -41,22 +41,25 @@
             <div class="row">
             	<div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                    	<label for="procedure_name" class="control-label">Название продцедура:</label>
-                        <input type="text" class="form-control" id="procedure_name" value=""  placeholder="Название">
+                    	<label for="procedure_type" class="control-label">Вид продцедура:</label>
+                         <select id="procedure_type"  class="form-control" onchange="setProcedureSettings()" >
+                             <option value="" selected="selected">--Выбрать--</option>		
+    					  </select>
+                     </div>
+                 </div>
+            	<div class="col-xs-6 col-md-3 col-lg-3 ">
+                	<div class="form-group" id="procedure_name_div">
+                    	
                      </div>
                  </div>                 
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
-                	<div class="form-group">
-                    	<label for="procedure_cost" class="control-label">Стоитмость процедура:</label>
-                        <input type="number" class="form-control" id="procedure_cost" value=""  placeholder="Стоитмость">
+                	<div class="form-group" id="procedure_cost_div">
+                    	
                      </div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
-                	<div class="form-group">
-                    	<label for="procedure_type" class="control-label">Вид продцедура:</label>
-                         <select id="procedure_type"  class="form-control" >
-                             <option value="" selected="selected">--Выбрать--</option>		
-    					  </select>
+                	<div class="form-group" id="procedure_duration_div">
+                    	
                      </div>
                  </div>
             </div>
@@ -84,22 +87,24 @@
         <div id="collapseTable" class="collapse show" aria-labelledby="headingRegistration">
           <div class="card-body multi-collapse">
             <div class="row">
-            	<div class="col-xs-6 col-md-3 col-lg-3 ">
-                	
+            	<div class="col-xs-6 col-md-3 col-lg-3 text-left">
+                	<div id="edit_button">
+                		<button type="button" class="btn btn-warning" onclick="editTable()"><i class="fa fa-pencil"></i></button>
+                	</div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                         <select id="procedure_type_search"  class="form-control" >
+                         <select id="procedure_type_search"  class="form-control" onchange="getProceduresTable()">
                              <option value="" selected="selected">--Выбрать вид продцедура:--</option>		
     					  </select> 
                      </div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                        <input type="text" class="form-control" id="search_procedure" value=""  placeholder="Пойск">
+                        <input type="text" class="form-control" id="search_procedure" value="" onkeyup="getProceduresTable()"  placeholder="Пойск">
                      </div>
                  </div>
             </div>
@@ -112,6 +117,25 @@
         </div>
       </div>
      </div>
+     
+     <!-- Modal -->
+        <div class="modal fade" id="procedure_settings" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Новые данные</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" id="settings_modal">
+              </div>
+              <div class="modal-footer" id="settings_footer">
+                
+              </div>
+            </div>
+          </div>
+        </div>
       
 
     <!-- Optional JavaScript -->
@@ -119,6 +143,7 @@
     <script src="bootstrap/jquery-3.5.1.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script src="view/js/Procedures.js?0.4" ></script>
+    <script type="text/javascript" src="bootstrap/swal.js"></script>
+    <script src="view/js/Procedures.js?0.8" ></script>
   </body>
 </html>

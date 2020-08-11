@@ -38,13 +38,69 @@ class AppointmentsController extends ControladorBase{
         $extras = new ExtrasModel();
         
         $columnas="procedimientos.id_procedimientos, procedimientos.nombre_procedimientos";
-        $tablas="procedimientos INNER JOIN tipo_procedimientos
-                 ON procedimientos.id_tipo_procedimientos = tipo_procedimientos.id_tipo_procedimientos";
-        $where="1=1";
+        $tablas="procedimientos INNER JOIN estados
+                 ON estados.id_estados = procedimientos.id_estado_procedimientos";
+        $where="nombre_estados ='ACTIVO' AND tabla_estados='procedimientos'";
         $id="id_procedimientos";
         $resultSet=$extras->getCondiciones($columnas, $tablas, $where, $id);
         
         echo json_encode($resultSet);
+    }
+    
+    public function getProcedureZones()
+    {
+        $extras = new ExtrasModel();
+        
+        $id_procedimiento = $_POST['id_procedure'];
+        
+        $columnas="especificaciones_procedimientos.id_especificaciones_procedimientos, especificaciones_procedimientos.nombre_especificaciones_procedimientos";
+        $tablas="procedimientos INNER JOIN especificaciones_procedimientos
+                 ON procedimientos.id_procedimientos = especificaciones_procedimientos.id_procedimientos
+                 INNER JOIN estados
+                 ON estados.id_estados = especificaciones_procedimientos.id_estados";
+        $where="especificaciones_procedimientos.id_procedimientos=".$id_procedimiento." AND nombre_estados ='ACTIVO' AND tabla_estados='especificaciones_procedimientos'";
+        $id="especificaciones_procedimientos.id_procedimientos";
+        $resultSet=$extras->getCondiciones($columnas, $tablas, $where, $id);
+        
+        echo json_encode($resultSet);
+    }
+    
+    public function getExtraCost()
+    {
+        $extras = new ExtrasModel();
+        
+        $id_especificacion_procedimiento = $_POST['id_especificacion_procedimiento'];
+        
+        $columnas="costo_especificaciones_procedimientos, duracion_especificaciones_procedimientos";
+        $tablas="especificaciones_procedimientos";
+        $where="id_especificaciones_procedimientos =".$id_especificacion_procedimiento;
+        $id="id_especificaciones_procedimientos";
+        $resultSet=$extras->getCondiciones($columnas, $tablas, $where, $id);
+        
+        echo json_encode($resultSet);
+    }
+    
+    public function getAvailableHour() 
+    {
+        $free="#82E0AA";
+        $warning  = "#F7DC6F";
+        $busy = "#F1948A";
+        $html = '<select id="appointment_time"  class="form-control" >
+         			<option value="" selected="selected">--Выберите время--</option>';
+        $starting_time = "8:00";
+        $html.='<option value="'.$starting_time.'" selected="selected" style="background:'.$free.'">'.$starting_time.'</option>';
+        
+        while($starting_time != "19:30")
+        {
+            $endTime = strtotime("+30 minutes", strtotime($starting_time));
+            $timeend=date('H:i', $endTime);
+            $html.='<option value="'.$timeend.'" selected="selected" style="background:'.$free.'">'.$timeend.'</option>';
+            $starting_time = $timeend;
+        }
+        
+        $html.='</select>';
+        echo $html;
+        
     }
     
     public function getProcedureType()
@@ -69,13 +125,13 @@ class AppointmentsController extends ControladorBase{
         
         $id_procedimiento = $_POST['procedure_id'];
         
-        $columnas="precio_procedimientos";
+        $columnas="precio_procedimientos, duracion_procedimientos";
         $tablas="procedimientos";
         $where="id_procedimientos = ".$id_procedimiento;
         $id="id_procedimientos";
         $resultSet=$extras->getCondiciones($columnas, $tablas, $where, $id);
         
-        echo $resultSet[0]['precio_procedimientos'];
+        echo json_encode($resultSet);
     }
 }
 ?>

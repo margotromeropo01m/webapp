@@ -128,6 +128,21 @@ function fieldValidation(fieldName)
 			console.log("procedure")
 			break;
 		case "date_field":
+			var date = $("#appointment_date").val()
+			var time = $("#appointment_time").val()
+			var duration = $("#appointment_duration").val()
+			if (date != "" && time != "" && duration != "")
+				{
+				 answer = true
+				}
+			else
+				{
+				Swal.fire({
+					  icon: 'info',
+					  title: 'Недостаточная информация о записи',
+					  text: 'Пожалуйста запольните все данные'
+					})
+				}
 			console.log("date")
 	}
 	
@@ -144,7 +159,7 @@ function newPatient()
 					        '<input type="date" class="form-control" id="patient_birthday" placeholder="Дата рождения" />'+
 					        '<div id = "patient_buttons"class="col text-center">'+
 		            		'<button type="button" class="btn btn-primary" onclick="savePatient()">Сохранить</button>'+
-		            		'<button type="button" class="btn btn-danger" onclick="cancelPatient()">Отменить</button>'+
+		            		'<button type="button" class="btn btn-warning" onclick="cancelPatient()">Очистить</button>'+
 		            		'</div>'
 		
         $('#client_info_block').html(patient_input)
@@ -251,7 +266,7 @@ function searchPatient()
 						'<input type="text" id="patient_phone" placeholder="Телефон" />'+
 						'<div id = "patient_buttons"class="col text-center">'+
 	            		'<button type="button" class="btn btn-primary" onclick="findPatient()">Искать</button>'+
-	            		'<button type="button" class="btn btn-danger" onclick="cancelPatient()">Отменить</button>'+
+	            		'<button type="button" class="btn btn-warning" onclick="cancelPatient()">Очистить</button>'+
 	            		'</div>'
 	
 	$('#client_info_block').html(patient_input)
@@ -315,7 +330,7 @@ function findPatient()
 					        '<label class="control-label">Дата рождения:</label>'+
 					        '<input type="date" class="form-control" id="patient_birthday" value="'+x[0]['fecha_n_pacientes']+'" readonly/>'+
 					        '<div id = "patient_buttons"class="col text-center">'+
-		            		'<button type="button" class="btn btn-danger" onclick="cancelPatient()">Отменить</button>'+
+		            		'<button type="button" class="btn btn-warning" onclick="cancelPatient()">Очистить</button>'+
 		            		'</div>'
 		            		
 		            		$('#client_info_block').html(patient_input)
@@ -354,6 +369,70 @@ function getProcedures()
 		.fail(function() {
 		    console.log("error");
 		});
+}
+
+function getProcedureZones()
+{
+	var procedure_id = $("#procedure_id").val()
+	$.ajax({
+		    url: 'index.php?controller=Appointments&action=GetProcedureZones',
+		    type: 'POST',
+		    data: {id_procedure:procedure_id},
+		})
+		.done(function(x) {
+			
+			x=JSON.parse(x)
+					
+		    select = document.getElementById('procedure_zone');
+
+		for (var i = 0; i<x.length; i++){
+		    var opt = document.createElement('option');
+		    opt.value = x[i]['id_especificaciones_procedimientos'];
+		    opt.innerHTML = x[i]['nombre_especificaciones_procedimientos'];
+		    select.appendChild(opt);
+		}
+		})
+		.fail(function() {
+		    console.log("error");
+		});
+}
+
+function getAppointmentHours()
+{
+	
+	var date = $("#appointment_date").val()
+	var duration = $("#appointment_duration").val()
+	
+	if(date == "" || duration == "")
+		{
+		Swal.fire({
+			  icon: 'warning',
+			  title: 'Внимание',
+			  text: 'Запольните дату и продолжительность'
+			})
+		}
+	else
+		{
+		$.ajax({
+		    url: 'index.php?controller=Appointments&action=getAvailableHour',
+		    type: 'POST',
+		    data: {
+		    	selected_date:date,
+		    	duration:duration
+		    },
+		})
+		.done(function(x) {
+			
+			console.log(x)
+			$("#appointmet_time_section").html(x)
+			$("#appointment_time").val("")
+		})
+		.fail(function() {
+		    console.log("error");
+		});
+		}
+	
+	
 }
 
 function CountRows() {
@@ -398,16 +477,19 @@ function addProcedure()
 		
 		{
 			case "ПО ЗОНАМ":
+				settingProcedureZone()
 			break;
 			case "ПО ПРЕПАРАТАМ":
+				settingProcedurePreparat()
 			break;
 			case "ПО КОЛ-ВУ ЗОН":
-			settingPocedureZoneq()
+				settingProcedureZoneq()
 			break;
 			case "ПО ЭДИНИЦАМ":
+				settingProcedureUnits()
 			break;
 			case "БЕЗ ДОП.":
-			settingProcedureBD()			
+				settingProcedureBD()			
 			break;
 		}
 			
@@ -437,17 +519,315 @@ function settingProcedureBD()
 function settingProcedureZoneq()
 {
  	var settings_input ='<label class="control-label">Кол-во Зон:</label>'+
- 						'<input type="number" class="form-control" id="procedure_zone_count" placeholder="Скидка"/>'+ 
+ 						'<input type="number" class="form-control" id="procedure_zone_count" placeholder="Кол-во Зон"/>'+ 
  						'<label class="control-label">Скидка (%):</label>'+
  						'<input type="number" class="form-control" id="procedure_discount" placeholder="Скидка"/>'
 				        
- 	var buttons_settings = '<button type="button" class="btn btn-primary" onclick="addProcedureBD()">Сохранить</button>'+
+ 	var buttons_settings = '<button type="button" class="btn btn-primary" onclick="addProcedureZoneq()">Сохранить</button>'+
             				'<button type="button" class="btn btn-danger" onclick="cancelModal()">Отменить</button>'
             				
 	$("#settings_modal").html(settings_input)
 	$("#settings_footer").html(buttons_settings)
 	
 	$("#procedure_settings").modal('show')
+}
+
+function settingProcedureZone()
+{
+ 	var settings_input ='<select id="procedure_zone"  class="form-control" >'+
+						'<option value="" selected="selected">--Выбрать зону--</option>'+		
+  						'</select>'+ 
+ 						'<label class="control-label">Скидка (%):</label>'+
+ 						'<input type="number" class="form-control" id="procedure_discount" placeholder="Скидка"/>'
+				        
+ 	var buttons_settings = '<button type="button" class="btn btn-primary" onclick="addProcedureZone()">Сохранить</button>'+
+            				'<button type="button" class="btn btn-danger" onclick="cancelModal()">Отменить</button>'
+            				
+	$("#settings_modal").html(settings_input)
+	$("#settings_footer").html(buttons_settings)
+	
+	getProcedureZones()
+	
+	$("#procedure_settings").modal('show')
+}
+
+function settingProcedurePreparat()
+{
+ 	var settings_input ='<select id="procedure_zone"  class="form-control" >'+
+						'<option value="" selected="selected">--Выбрать препарат--</option>'+		
+  						'</select>'+ 
+ 						'<label class="control-label">Скидка (%):</label>'+
+ 						'<input type="number" class="form-control" id="procedure_discount" placeholder="Скидка"/>'
+				        
+ 	var buttons_settings = '<button type="button" class="btn btn-primary" onclick="addProcedureZone()">Сохранить</button>'+
+            				'<button type="button" class="btn btn-danger" onclick="cancelModal()">Отменить</button>'
+            				
+	$("#settings_modal").html(settings_input)
+	$("#settings_footer").html(buttons_settings)
+	
+	getProcedureZones()
+	
+	$("#procedure_settings").modal('show')
+}
+
+function settingProcedureUnits()
+{
+ 	var settings_input ='<select id="procedure_zone"  class="form-control" >'+
+						'<option value="" selected="selected">--Выбрать единицу--</option>'+		
+  						'</select>'+
+  						'<label class="control-label">Кол-во единиц:</label>'+
+ 						'<input type="number" class="form-control" id="procedure_units" placeholder="Кол-во единиц"/>'+
+ 						'<label class="control-label">Скидка (%):</label>'+
+ 						'<input type="number" class="form-control" id="procedure_discount" placeholder="Скидка"/>'
+				        
+ 	var buttons_settings = '<button type="button" class="btn btn-primary" onclick="addProcedureUnits()">Сохранить</button>'+
+            				'<button type="button" class="btn btn-danger" onclick="cancelModal()">Отменить</button>'
+            				
+	$("#settings_modal").html(settings_input)
+	$("#settings_footer").html(buttons_settings)
+	
+	getProcedureZones()
+	
+	$("#procedure_settings").modal('show')
+}
+
+function addProcedureZone()
+{
+ 
+ var procedure_id = $("#procedure_id").val()
+ var procedure_name = $("#procedure_id")[0].selectedOptions[0].innerText
+ var procedure_discount = $("#procedure_discount").val()
+ if (typeof procedure_discount === 'undefined'|| procedure_discount=="") procedure_discount=0
+ var procedure_zone = $("#procedure_zone").val()
+ if (typeof procedure_zone === 'undefined'|| procedure_zone=="")
+ {
+ Swal.fire({
+	  icon: 'warning',
+	  title: 'Внимание',
+	  text: 'Выверите зону'
+	})
+ }
+else
+ {
+ $("#procedure_settings").modal('hide')
+ 
+ console.log(procedure_discount)
+$.ajax({
+		    url: 'index.php?controller=Appointments&action=GetExtraCost',
+		    type: 'POST',
+		    data: {
+		    	id_especificacion_procedimiento:procedure_zone
+		    },
+		})
+		.done(function(x) {
+			
+			
+			console.log(x)
+			x=JSON.parse(x)
+			procedure_zone = $("#procedure_zone")[0].selectedOptions[0].innerText
+			var table = document.getElementById("procedures_table")
+			
+			
+				var rowCount = CountRows()
+				var i = rowCount + 1
+				var row = table.insertRow();
+				
+				// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				var cell4 = row.insertCell(3);
+				var cell5 = row.insertCell(4);
+				var cell6 = row.insertCell(5);
+				var cell7 = row.insertCell(6);
+				var cell8 = row.insertCell(7);
+				
+				//var i =  rowCount+1
+				// Add some text to the new cells:
+				cell2.innerHTML = i;
+				cell3.innerHTML = procedure_name;
+				cell4.innerHTML = procedure_zone;
+				cell5.innerHTML = x[0]['duracion_especificaciones_procedimientos'];
+				cell6.innerHTML = x[0]['costo_especificaciones_procedimientos'];
+				cell7.innerHTML = procedure_discount;
+				cell8.innerHTML = '<ul class="pagination">'+
+								  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+								  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+								  '</ul>'
+				cell1.innerHTML ='<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
+			
+			
+			$("#procedure_id").val("")
+						
+		})
+		.fail(function() {
+		    console.log("error");
+		});
+ }
+}
+
+function addProcedureZoneq()
+{
+ 
+ var procedure_id = $("#procedure_id").val()
+ var procedure_name = $("#procedure_id")[0].selectedOptions[0].innerText
+ var procedure_discount = $("#procedure_discount").val()
+ if (typeof procedure_discount === 'undefined'|| procedure_discount=="") procedure_discount=0
+ var procedure_zone_count = $("#procedure_zone_count").val()
+ 
+ if (typeof procedure_zone_count === 'undefined'|| procedure_zone_count=="" || procedure_zone_count == "0")
+	 {
+	 Swal.fire({
+		  icon: 'warning',
+		  title: 'Внимание',
+		  text: 'Укажите кол-во зон'
+		})
+	 }
+ else
+	 {
+	 $("#procedure_settings").modal('hide')
+	 
+	 console.log(procedure_discount)
+	$.ajax({
+			    url: 'index.php?controller=Appointments&action=GetProcedureBDCost',
+			    type: 'POST',
+			    data: {
+			    		procedure_id:procedure_id
+			    },
+			})
+			.done(function(x) {
+				
+				x=x.trim()
+				console.log(x)
+				
+				var table = document.getElementById("procedures_table")
+				
+				for(var j = 0; j<procedure_zone_count; j++)
+					{
+					var rowCount = CountRows()
+					var i = rowCount + 1
+					var row = table.insertRow();
+					
+					// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+					var cell1 = row.insertCell(0);
+					var cell2 = row.insertCell(1);
+					var cell3 = row.insertCell(2);
+					var cell4 = row.insertCell(3);
+					var cell5 = row.insertCell(4);
+					var cell6 = row.insertCell(5);
+					var cell7 = row.insertCell(6);
+					var cell8 = row.insertCell(7);
+					
+					//var i =  rowCount+1
+					// Add some text to the new cells:
+					cell2.innerHTML = i;
+					cell3.innerHTML = procedure_name;
+					cell4.innerHTML = procedure_zone;
+					cell5.innerHTML = x[0]['duracion_especificaciones_procedimientos'];
+					cell6.innerHTML = x[0]['costo_especificaciones_procedimientos'];
+					cell7.innerHTML = procedure_discount;
+					cell8.innerHTML = '<ul class="pagination">'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+									  '</ul>'
+					cell1.innerHTML ='<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
+					}
+				
+				
+				$("#procedure_id").val("")
+							
+			})
+			.fail(function() {
+			    console.log("error");
+			});
+	 }
+ 
+}
+
+function addProcedureUnits()
+{
+ 
+ var procedure_id = $("#procedure_id").val()
+ var procedure_name = $("#procedure_id")[0].selectedOptions[0].innerText
+ var procedure_discount = $("#procedure_discount").val()
+ if (typeof procedure_discount === 'undefined'|| procedure_discount=="") procedure_discount=0
+ var procedure_units = $("#procedure_units").val()
+ var procedure_zone = $("#procedure_zone").val()
+ 
+ 
+ if (typeof procedure_units === 'undefined'|| procedure_units==""|| procedure_units=="0")
+	 {
+	 Swal.fire({
+		  icon: 'warning',
+		  title: 'Внимание',
+		  text: 'Укажите кол-во единиц'
+		})
+	 }
+ else if (typeof procedure_zone === 'undefined'|| procedure_zone=="")
+	 {
+	 Swal.fire({
+		  icon: 'warning',
+		  title: 'Внимание',
+		  text: 'Выберите единицу'
+		})
+	 }
+ else
+	 {
+	 $("#procedure_settings").modal('hide')
+	 
+	 console.log(procedure_discount)
+	$.ajax({
+			    url: 'index.php?controller=Appointments&action=GetExtraCost',
+			    type: 'POST',
+			    data: {
+			    	id_especificacion_procedimiento:procedure_zone
+			    },
+			})
+			.done(function(x) {
+				
+				x=x.trim()
+				console.log(x)
+				procedure_zone = $("#procedure_zone")[0].selectedOptions[0].innerText
+				var table = document.getElementById("procedures_table")
+				
+				for(var j = 0; j<procedure_units; j++)
+					{
+					var rowCount = CountRows()
+					var i = rowCount + 1
+					var row = table.insertRow();
+					
+					// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+					var cell1 = row.insertCell(0);
+					var cell2 = row.insertCell(1);
+					var cell3 = row.insertCell(2);
+					var cell4 = row.insertCell(3);
+					var cell5 = row.insertCell(4);
+					var cell6 = row.insertCell(5);
+					var cell7 = row.insertCell(6);
+					
+					//var i =  rowCount+1
+					// Add some text to the new cells:
+					cell2.innerHTML = i;
+					cell3.innerHTML = procedure_name;
+					cell4.innerHTML = procedure_zone;
+					cell5.innerHTML = x;
+					cell6.innerHTML = procedure_discount;
+					cell1.innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
+					cell7.innerHTML = '<ul class="pagination">'+
+					  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+					  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+					  '</ul>'
+					}
+				
+				
+				$("#procedure_id").val("")
+							
+			})
+			.fail(function() {
+			    console.log("error");
+			});
+	 }
+ 
 }
 
 function addProcedureBD()
@@ -487,15 +867,20 @@ $.ajax({
 			var cell4 = row.insertCell(3);
 			var cell5 = row.insertCell(4);
 			var cell6 = row.insertCell(5);
+			var cell7 = row.insertCell(6)
 			
 			//var i =  rowCount+1
 			// Add some text to the new cells:
-			cell1.innerHTML = i;
-			cell2.innerHTML = procedure_name;
-			cell3.innerHTML = "";
-			cell4.innerHTML = x;
-			cell5.innerHTML = procedure_discount;
-			cell6.innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
+			cell2.innerHTML = i;
+			cell3.innerHTML = procedure_name;
+			cell4.innerHTML = "";
+			cell5.innerHTML = x;
+			cell6.innerHTML = procedure_discount;
+			cell1.innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
+			cell7.innerHTML = '<ul class="pagination">'+
+			  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+			  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+			  '</ul>'
 			
 			$("#procedure_id").val("")
 						
@@ -523,13 +908,131 @@ function DeleteRow(rowNum)
 	for (var j=1; j<i; j++)
 	{
 	 var x= table.rows[j].cells;
-	 x[0].innerHTML = j
-	 x[5].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+j+')"><i class="fa fa-close"></i></button>'
+	 x[1].innerHTML = j
+	 x[0].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+j+')"><i class="fa fa-close"></i></button>'
 	}
+}
+
+function MoveProcedureUp(rowNum)
+{
+	var table = document.getElementById("procedures_table")
+	
+	var rowCount = CountRows()
+	var i = rowCount + 1
+	
+	if (rowNum!="1")
+		{	
+			for (var j=1; j<i; j++)
+			{
+				if (j==rowNum)
+					{
+					var prevIndex=j-1
+					var x= table.rows[j].cells;
+					var y= table.rows[j-1].cells;
+					
+					var y2 = y[2].innerHTML
+					var y3 = y[3].innerHTML
+					var y4 = y[4].innerHTML
+					var y5 = y[5].innerHTML
+					var y6 = y[6].innerHTML
+					
+					y[1].innerHTML = j-1
+					y[0].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+prevIndex+')"><i class="fa fa-close"></i></button>'
+					y[2].innerHTML = x[2].innerHTML
+					y[3].innerHTML = x[3].innerHTML
+					y[4].innerHTML = x[4].innerHTML
+					y[5].innerHTML = x[5].innerHTML
+					y[6].innerHTML = '<ul class="pagination">'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+prevIndex+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+prevIndex+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+									  '</ul>'
+					
+					x[1].innerHTML = j
+					x[0].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+j+')"><i class="fa fa-close"></i></button>'
+					x[2].innerHTML = y2
+					x[3].innerHTML = y3
+					x[4].innerHTML = y4
+					x[5].innerHTML = y5
+					x[6].innerHTML = '<ul class="pagination">'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+j+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+j+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+									  '</ul>'
+					
+					}
+			 
+			}
+			
+			
+		}
+}
+
+function MoveProcedureDown(rowNum)
+{
+	var table = document.getElementById("procedures_table")
+	
+	var rowCount = CountRows()
+	var i = rowCount + 1
+	
+	if (rowNum!=i)
+		{	
+			for (var j=1; j<i; j++)
+			{
+				if (j==rowNum)
+					{
+					var nextIndex=j+1
+					var x= table.rows[j].cells;
+					var y= table.rows[j+1].cells;
+					
+					var y2 = y[2].innerHTML
+					var y3 = y[3].innerHTML
+					var y4 = y[4].innerHTML
+					var y5 = y[5].innerHTML
+					var y6 = y[6].innerHTML
+					
+					y[1].innerHTML = j+1
+					y[0].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+nextIndex+')"><i class="fa fa-close"></i></button>'
+					y[2].innerHTML = x[2].innerHTML
+					y[3].innerHTML = x[3].innerHTML
+					y[4].innerHTML = x[4].innerHTML
+					y[5].innerHTML = x[5].innerHTML
+					y[6].innerHTML = '<ul class="pagination">'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+nextIndex+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+nextIndex+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+									  '</ul>'
+					
+					x[1].innerHTML = j
+					x[0].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+j+')"><i class="fa fa-close"></i></button>'
+					x[2].innerHTML = y2
+					x[3].innerHTML = y3
+					x[4].innerHTML = y4
+					x[5].innerHTML = y5
+					x[6].innerHTML = '<ul class="pagination">'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+j+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+j+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+									  '</ul>'
+					
+					}
+			 
+			}
+			
+			
+		}
 }
 
 function cancelModal()
 {
 	 $("#procedure_settings").modal('hide')
 	 $("#procedure_id").val("")
+}
+
+function cleanProceduresTable()
+{
+	var table = document.getElementById("procedures_table")
+	var rowCount = CountRows()
+	var i = rowCount + 1
+	
+	for (var j=1; j<i; j++)
+	{
+		table.deleteRow(1);
+	}
 }

@@ -21,7 +21,7 @@
 	
 	<div class="container-fluid" id="grad1">
     <div class="row justify-content-center mt-0">
-        <div class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-3 mb-2">
+        <div class="col-11 col-sm-9 col-md-7 col-lg-8 text-center p-0 mt-3 mb-2">
             <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
                 <h2><strong>Новая Запись</strong></h2>
                 <div class="row">
@@ -31,7 +31,7 @@
                             <ul id="progressbar">
                                 <li class="active" id="patient"><strong>Пациент</strong></li>
                                 <li id="procedures"><strong>Процедуры</strong></li>
-                                <li id="dates"><strong>Дата</strong></li>
+                                <li id="dates"><strong>Информация</strong></li>
                                 <li id="confirm"><strong>Записать</strong></li>
                             </ul> <!-- fieldsets -->
                             <fieldset name="patient_field">
@@ -57,24 +57,42 @@
     					  			<table id='procedures_table' class='table table-bordered'>
                                         <thead>
                                             <tr>
+                                            <th></th>
                                            	<th></th>
                                             <th>Процедура</th>
                                             <th>Доп. информация</th>
+                                            <th>мин.</th>
                                             <th>Цена (руб.)</th>
                                             <th>Скидка (%)</th>
-                                            <th></th>
+                                            <th></th>                                            
                                             </tr>
                                         </thead>
                                         <tbody>
                                         </tbody>
                                    </table>
+                                   <div class="col text-center">
+                                		<button type="button" class="btn btn-warning" onclick="cleanProceduresTable()">Очистить</button>
+                                	</div>
                                 </div> 
                                 <button type="button" class="previous btn btn-secondary" name="next">Назад</button>
                                 <button type="button" class="next btn btn-primary" name="next">Далее</button>
                             </fieldset>
                             <fieldset name="date_field">
                                 <div class="form-card">
-                                    <h2 class="fs-title">Payment Information</h2>                                    
+                                    <h2 class="fs-title">Информация записи</h2>
+                                    <label class="control-label">Дата записи:</label>
+                                    <input type="date" class="form-control" id="appointment_date" placeholder="Дата" />
+                                    <input type="number" class="form-control" id="appointment_duration" placeholder="Продолжительность (мин)" />
+                                    <label class="control-label">Время записи:</label>
+                                    <div id="appointmet_time_section">
+                                    	<button type="button" class="btn btn-dark" onclick="getAppointmentHours()"><i class="fa fa-clock-o"></i></button>
+                                    </div>        					        
+        					        <input type="text" class="form-control" id="appointment_observation" placeholder="Примечание" />
+        					        
+        					        
+        					        <div id = "appointment_buttons"class="col text-center">
+        		            		<button type="button" class="btn btn-warning" onclick="clearAppointmentinfo()">Очистить</button>
+        		            		</div>                                   
                                 </div>
                                 <button type="button" class="previous btn btn-secondary" name="next">Назад</button>
                                 <button type="button" class="next btn btn-primary" name="next">Далее</button>
@@ -128,6 +146,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/Appointments.js?0.5"></script>
+    <script src="view/js/Appointments.js?0.11"></script>
   </body>
 </html>

@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//controller/AppointmentsController.php=UTF-8
 encoding//controller/ExtrasController.php=UTF-8
 encoding//controller/PatientsController.php=UTF-8
 encoding//controller/ProceduresController.php=UTF-8
