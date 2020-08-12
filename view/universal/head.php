@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     
     <link rel="stylesheet" a href="fontawesome/font-awesome.min.css">
-    
+    <link rel="icon" href="view/universal/logo.png" type="image/x-icon">
 	<style type="text/css">
     	.sticky-offset {
-        top: 56px;
+        top: 11%;
         }
         
         <?php if ($pageName == "Appointments") {include("view/universal/appointments_css.php");}?>
         
 	</style>
-    <title>Клиника</title>
+    <title>ВИКТОРИЯ ЭСТЕТИК - ЦЕНТР</title>
   </head>

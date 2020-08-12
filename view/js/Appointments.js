@@ -261,6 +261,70 @@ function cancelPatient()
 
 function searchPatient()
 {
+	var patient_input = '<input type="text" class="form-control" id="patientSearch" name="cedula_usuarios" value="" onkeyup="loadPatients(1)"  placeholder="Пойск">'+
+						'<div id="patients_table"></div>'+
+						'</div>'
+	
+	$('#client_info_block').html(patient_input)
+					        
+	$('#patient_phone').mask('+7-(000)-000-00-00')
+	$("#patient_phone").on('keyup', function (e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+        findPatient()
+    }
+})
+}
+
+function loadPatients(page)
+{
+	var search = $("#patientSearch").val()
+	
+	var firstChar = search.charAt(0)
+	
+	if( firstChar <='9' && firstChar >='0') {
+      
+		search = formatNumber(search)
+	}
+	
+	$.ajax({
+	    url: 'index.php?controller=Appointments&action=GetPatients',
+	    type: 'POST',
+	    data: {
+	    	search:search,
+	    	page:page
+	    },
+	})
+	.done(function(x) {
+		x=x.trim()
+		$('#patients_table').html(x)	
+	})
+	.fail(function() {
+	    console.log("error");
+	});
+}
+
+function formatNumber(number)
+{
+	var format = "+7-(XXX)-XXX-XX-XX"
+	var res	
+		for(var i = 0; i<number.length; i++)
+			{
+			 res=format.replace(/X/, number.charAt(i))
+			 format = res
+			}
+	var x = format.indexOf("X")
+	if (x==-1) x=format.length
+	var newFormat = ""
+	for (var i = 0; i<x; i++)
+		{
+		 newFormat += format.charAt(i)
+		 
+		}
+	return newFormat
+}
+
+/*function searchPatient()
+{
 	var patient_input = '<label class="control-label">Введите номер телефона зарегистрированого пациента:</label>'+
 						'<input type="text" class="form-control" id="patient_name" placeholder="Имя" style="display: none"/>'+
 						'<input type="text" id="patient_phone" placeholder="Телефон" />'+
@@ -277,28 +341,17 @@ function searchPatient()
         findPatient()
     }
 })
-}
+}*/
 
-function findPatient()
+function findPatient(id_patient)
 {
-	var phone = $("#patient_phone").val()
 	
-	if (phone.length < 18)
-	{
-	Swal.fire({
-					  icon: 'warning',
-					  title: 'Внимание',
-					  text: 'Неверный формат телефона!'
-					})
-	}
-	else
-	{
 	$.ajax({
 		    url: 'index.php?controller=Appointments&action=FindPatient',
 		    type: 'POST',
 		    data: {
 		    	
-		    	patient_phone:phone
+		    	patient_id:id_patient
 		    },
 		})
 		.done(function(x) {
@@ -326,7 +379,7 @@ function findPatient()
 				 var patient_input = '<input type="text" class="form-control" id="patient_surname" value="'+x[0]['familia_pacientes']+'" readonly/>'+
 					        '<input type="text" class="form-control" id="patient_name" value="'+x[0]['imya_pacientes']+'" readonly/>'+
 					        '<input type="text" class="form-control" id="patient_patronimic" value="'+x[0]['ochestvo_pacientes']+'" readonly/>'+
-					        '<input type="text" class="form-control" id="patient_phone" value="'+phone+'" readonly/>'+
+					        '<input type="text" class="form-control" id="patient_phone" value="'+x[0]['telefon_pacientes']+'" readonly/>'+
 					        '<label class="control-label">Дата рождения:</label>'+
 					        '<input type="date" class="form-control" id="patient_birthday" value="'+x[0]['fecha_n_pacientes']+'" readonly/>'+
 					        '<div id = "patient_buttons"class="col text-center">'+
@@ -342,7 +395,6 @@ function findPatient()
 		.fail(function() {
 		    console.log("error");
 		});
-	}
 	
 }
 
@@ -699,11 +751,11 @@ function addProcedureZoneq()
 				
 				x=x.trim()
 				console.log(x)
-				
+				x=JSON.parse(x)
+					
 				var table = document.getElementById("procedures_table")
 				
-				for(var j = 0; j<procedure_zone_count; j++)
-					{
+				
 					var rowCount = CountRows()
 					var i = rowCount + 1
 					var row = table.insertRow();
@@ -718,20 +770,21 @@ function addProcedureZoneq()
 					var cell7 = row.insertCell(6);
 					var cell8 = row.insertCell(7);
 					
+					var precio_total = x[0]['precio_procedimientos'] * procedure_zone_count
 					//var i =  rowCount+1
 					// Add some text to the new cells:
 					cell2.innerHTML = i;
 					cell3.innerHTML = procedure_name;
-					cell4.innerHTML = procedure_zone;
-					cell5.innerHTML = x[0]['duracion_especificaciones_procedimientos'];
-					cell6.innerHTML = x[0]['costo_especificaciones_procedimientos'];
+					cell4.innerHTML = '';
+					cell5.innerHTML = x[0]['duracion_procedimientos'];
+					cell6.innerHTML = precio_total;
 					cell7.innerHTML = procedure_discount;
 					cell8.innerHTML = '<ul class="pagination">'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
 									  '</ul>'
 					cell1.innerHTML ='<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
-					}
+					
 				
 				
 				$("#procedure_id").val("")
@@ -787,6 +840,8 @@ function addProcedureUnits()
 				
 				x=x.trim()
 				console.log(x)
+				
+				x=JSON.parse(x)
 				procedure_zone = $("#procedure_zone")[0].selectedOptions[0].innerText
 				var table = document.getElementById("procedures_table")
 				
@@ -804,19 +859,22 @@ function addProcedureUnits()
 					var cell5 = row.insertCell(4);
 					var cell6 = row.insertCell(5);
 					var cell7 = row.insertCell(6);
+					var cell8 = row.insertCell(7);
 					
+					var precio_total = procedure_units * x[0]['costo_especificaciones_procedimientos']
 					//var i =  rowCount+1
 					// Add some text to the new cells:
 					cell2.innerHTML = i;
 					cell3.innerHTML = procedure_name;
 					cell4.innerHTML = procedure_zone;
-					cell5.innerHTML = x;
-					cell6.innerHTML = procedure_discount;
-					cell1.innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
-					cell7.innerHTML = '<ul class="pagination">'+
-					  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
-					  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
-					  '</ul>'
+					cell5.innerHTML = x[0]['duracion_especificaciones_procedimientos'];
+					cell6.innerHTML = precio_total
+					cell7.innerHTML = procedure_discount;
+					cell8.innerHTML = '<ul class="pagination">'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+									  '</ul>'
+					cell1.innerHTML ='<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
 					}
 				
 				
@@ -854,6 +912,8 @@ $.ajax({
 			x=x.trim()
 			console.log(x)
 			
+			x=JSON.parse(x)
+			
 			var table = document.getElementById("procedures_table")
 			
 			var rowCount = CountRows()
@@ -867,20 +927,22 @@ $.ajax({
 			var cell4 = row.insertCell(3);
 			var cell5 = row.insertCell(4);
 			var cell6 = row.insertCell(5);
-			var cell7 = row.insertCell(6)
+			var cell7 = row.insertCell(6);
+			var cell8 = row.insertCell(7);
 			
 			//var i =  rowCount+1
 			// Add some text to the new cells:
 			cell2.innerHTML = i;
-			cell3.innerHTML = procedure_name;
-			cell4.innerHTML = "";
-			cell5.innerHTML = x;
-			cell6.innerHTML = procedure_discount;
-			cell1.innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
-			cell7.innerHTML = '<ul class="pagination">'+
-			  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
-			  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
-			  '</ul>'
+					cell3.innerHTML = procedure_name;
+					cell4.innerHTML = '';
+					cell5.innerHTML = x[0]['duracion_procedimientos'];
+					cell6.innerHTML = x[0]['precio_procedimientos'];
+					cell7.innerHTML = procedure_discount;
+					cell8.innerHTML = '<ul class="pagination">'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+i+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
+									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
+									  '</ul>'
+					cell1.innerHTML ='<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
 			
 			$("#procedure_id").val("")
 						
@@ -935,6 +997,7 @@ function MoveProcedureUp(rowNum)
 					var y4 = y[4].innerHTML
 					var y5 = y[5].innerHTML
 					var y6 = y[6].innerHTML
+					var y7 = y[7].innerHTML
 					
 					y[1].innerHTML = j-1
 					y[0].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+prevIndex+')"><i class="fa fa-close"></i></button>'
@@ -942,7 +1005,8 @@ function MoveProcedureUp(rowNum)
 					y[3].innerHTML = x[3].innerHTML
 					y[4].innerHTML = x[4].innerHTML
 					y[5].innerHTML = x[5].innerHTML
-					y[6].innerHTML = '<ul class="pagination">'+
+					y[6].innerHTML = x[6].innerHTML
+					y[7].innerHTML = '<ul class="pagination">'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+prevIndex+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+prevIndex+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
 									  '</ul>'
@@ -953,7 +1017,8 @@ function MoveProcedureUp(rowNum)
 					x[3].innerHTML = y3
 					x[4].innerHTML = y4
 					x[5].innerHTML = y5
-					x[6].innerHTML = '<ul class="pagination">'+
+					x[6].innerHTML = y6
+					x[7].innerHTML = '<ul class="pagination">'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+j+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+j+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
 									  '</ul>'
@@ -988,6 +1053,7 @@ function MoveProcedureDown(rowNum)
 					var y4 = y[4].innerHTML
 					var y5 = y[5].innerHTML
 					var y6 = y[6].innerHTML
+					var y7 = y[7].innerHTML
 					
 					y[1].innerHTML = j+1
 					y[0].innerHTML = '<button type="button" class="btn btn-danger" onclick="DeleteRow('+nextIndex+')"><i class="fa fa-close"></i></button>'
@@ -995,7 +1061,8 @@ function MoveProcedureDown(rowNum)
 					y[3].innerHTML = x[3].innerHTML
 					y[4].innerHTML = x[4].innerHTML
 					y[5].innerHTML = x[5].innerHTML
-					y[6].innerHTML = '<ul class="pagination">'+
+					y[6].innerHTML = x[6].innerHTML
+					y[7].innerHTML = '<ul class="pagination">'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+nextIndex+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+nextIndex+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
 									  '</ul>'
@@ -1006,7 +1073,8 @@ function MoveProcedureDown(rowNum)
 					x[3].innerHTML = y3
 					x[4].innerHTML = y4
 					x[5].innerHTML = y5
-					x[6].innerHTML = '<ul class="pagination">'+
+					x[6].innerHTML = y6
+					x[7].innerHTML = '<ul class="pagination">'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureUp('+j+')"><i class="fa fa-arrow-circle-up fa-2x"></i></a></span></li>'+
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+j+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
 									  '</ul>'

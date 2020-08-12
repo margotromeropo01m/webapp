@@ -138,10 +138,10 @@ class PatientsController extends ControladorBase{
                 }
                 
                 
-                
                 $html.='</tbody>';
                 $html.='</table>';
-                $html.='</section></div>';
+                $html.='</section>';
+                $html.='</div>';
                 $html.='<div class="table-pagination pull-right">';
                 $html.=''. $this->paginate_patients("index.php", $page, $total_pages, $adjacents,"loadPatients").'';
                 $html.='</div>';
