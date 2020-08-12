@@ -124,6 +124,8 @@ function fieldValidation(fieldName)
 			else
 			{
 				answer = true
+				getAppointmentDuration()
+
 			}
 			console.log("procedure")
 			break;
@@ -147,6 +149,26 @@ function fieldValidation(fieldName)
 	}
 	
 	return answer	
+}
+
+function getAppointmentDuration()
+{
+	var table = document.getElementById("procedures_table")
+	
+	var rowCount = CountRows()
+	var i = rowCount + 1
+	var total_duration = 0;
+	for (var j=1; j<i; j++)
+	{
+	 var x= table.rows[j].cells;
+
+	 total_duration += parseInt(x[4].innerHTML)
+	
+	}
+
+	console.log(total_duration)
+
+	$('#appointment_duration').val(total_duration)
 }
 
 function newPatient()
@@ -455,22 +477,43 @@ function getAppointmentHours()
 	var date = $("#appointment_date").val()
 	var duration = $("#appointment_duration").val()
 	
-	if(date == "" || duration == "")
+	if(date == "")
 		{
 		Swal.fire({
 			  icon: 'warning',
 			  title: 'Внимание',
-			  text: 'Запольните дату и продолжительность'
+			  text: 'Запольните дату'
 			})
 		}
 	else
 		{
+			var procedures_table = []
+
+			var table = document.getElementById("procedures_table")
+	
+			var rowCount = CountRows()
+			var i = rowCount + 1
+			
+			for (var j=1; j<i; j++)
+			{
+				var x= table.rows[j].cells;
+				var rowElements = []
+				for(var k = 1; k<table.rows[j].cells.length-1; k++)
+				{
+					rowElements.push(x[k].innerHTML) 
+				}
+				procedures_table.push(rowElements)
+			}
+
+			var jsonString = JSON.stringify(procedures_table);
+
 		$.ajax({
 		    url: 'index.php?controller=Appointments&action=getAvailableHour',
 		    type: 'POST',
 		    data: {
 		    	selected_date:date,
-		    	duration:duration
+				duration:duration,
+				procedure_table:jsonString
 		    },
 		})
 		.done(function(x) {
@@ -845,8 +888,7 @@ function addProcedureUnits()
 				procedure_zone = $("#procedure_zone")[0].selectedOptions[0].innerText
 				var table = document.getElementById("procedures_table")
 				
-				for(var j = 0; j<procedure_units; j++)
-					{
+				
 					var rowCount = CountRows()
 					var i = rowCount + 1
 					var row = table.insertRow();
@@ -875,7 +917,7 @@ function addProcedureUnits()
 									  '<li class="page-item"><span><a class="page-link" onclick="MoveProcedureDown('+i+')"><i class="fa fa-arrow-circle-down fa-2x"></i></a></span></li>'+
 									  '</ul>'
 					cell1.innerHTML ='<button type="button" class="btn btn-danger" onclick="DeleteRow('+i+')"><i class="fa fa-close"></i></button>'
-					}
+					
 				
 				
 				$("#procedure_id").val("")

@@ -271,7 +271,14 @@ class AppointmentsController extends ControladorBase{
     
     public function getAvailableHour() 
     {
-        $free="#82E0AA";
+        $procedure_table = json_decode(stripslashes($_POST['procedure_table']));
+
+        foreach ($procedure_table as $procedure)
+        {
+            echo print_r($procedure) ;
+        }
+        
+        /*$free="#82E0AA";
         $warning  = "#F7DC6F";
         $busy = "#F1948A";
         $html = '<select id="appointment_time"  class="form-control" >
@@ -288,7 +295,7 @@ class AppointmentsController extends ControladorBase{
         }
         
         $html.='</select>';
-        echo $html;
+        echo $html;*/
         
     }
     

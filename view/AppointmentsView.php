@@ -82,7 +82,8 @@
                                     <h2 class="fs-title">Информация записи</h2>
                                     <label class="control-label">Дата записи:</label>
                                     <input type="date" class="form-control" id="appointment_date" placeholder="Дата" />
-                                    <input type="number" class="form-control" id="appointment_duration" placeholder="Продолжительность (мин)" />
+                                    <label class="control-label">Продолжительность записи (мин):</label>
+                                    <input type="number" class="form-control" id="appointment_duration" placeholder="Продолжительность (мин)" readonly/>
                                     <label class="control-label">Время записи:</label>
                                     <div id="appointmet_time_section">
                                     	<button type="button" class="btn btn-dark" onclick="getAppointmentHours()"><i class="fa fa-clock-o"></i></button>
@@ -146,6 +147,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/Appointments.js?0.13"></script>
+    <script src="view/js/Appointments.js?0.14"></script>
   </body>
 </html>
