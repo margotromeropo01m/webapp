@@ -132,10 +132,12 @@ function fieldValidation(fieldName)
 		case "date_field":
 			var date = $("#appointment_date").val()
 			var time = $("#appointment_time").val()
+			console.log(time)
 			var duration = $("#appointment_duration").val()
-			if (date != "" && time != "" && duration != "")
+			if (date != "" && time != "" && duration != "" && !(typeof time === 'undefined'))
 				{
 				 answer = true
+				 showAppointmentInfo()
 				}
 			else
 				{
@@ -149,6 +151,73 @@ function fieldValidation(fieldName)
 	}
 	
 	return answer	
+}
+
+function showAppointmentInfo()
+{
+	var name = $("#patient_name").val()
+	var surname = $("#patient_surname").val()
+	var patronimic = $("#patient_patronimic").val()
+	var birthday = $("#patient_birthday").val()
+	var phone = $("#patient_phone").val()
+	var date = $('#appointment_date').val()
+	var time = $('#appointment_time').val()
+	var duration = $('#appointment_duration').val()
+	var observation = $('#appointment_observation').val()
+
+	var info_cita ='<div class="row">'+
+		'<div class="card flex-md-row mb-4 box-shadow h-md-250 bg-light">'+
+		'<div class="card-body d-flex flex-column align-items-start">'+
+			'<h4 class="text-dark">Пациент : '+surname+' '+name+' '+patronimic+'</h4>'+
+			'<h4 class="text-dark">Дата : '+date+'</h4>'+
+			'<h4 class="text-dark">Время : '+time+'</h4>'+
+			'<h4 class="text-dark">Примечание : '+observation+'</h4>'+
+			'<h4 class="text-dark">Процедуры:</h4>'+
+			'<table id="procedures_table_info" class="table table-bordered">'+
+			'<thead>'+
+				'<tr>'+
+				'<th></th>'+
+				'<th>Процедура</th>'+
+				'<th>Доп. информация</th>'+
+				'<th>мин.</th>'+
+				'<th>Цена (руб.)</th>'+
+				'<th>Скидка (%)</th>'+                               
+				'</tr>'+		
+			'</thead>'+
+			'<tbody>'+
+			'</tbody>'+
+		'</table>'+
+		'</div>'+                       
+		'</div>'+
+	'</div>'
+
+	$('#info_cita_final').html(info_cita)
+
+	var table = document.getElementById("procedures_table")
+
+	var table2 = document.getElementById("procedures_table_info")
+	
+	var rowCount = CountRows()
+	var i = rowCount + 1
+		
+	for (var j=1; j<i; j++)
+	{
+
+		var row = table2.insertRow();
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var cell5 = row.insertCell(4);
+		var cell6 = row.insertCell(5);
+	 var x= table.rows[j].cells;
+		cell1.innerHTML = x[1].innerHTML
+		cell2.innerHTML = x[2].innerHTML
+		cell3.innerHTML = x[3].innerHTML
+		cell4.innerHTML = x[4].innerHTML
+		cell5.innerHTML = x[5].innerHTML
+		cell6.innerHTML = x[6].innerHTML
+	}
 }
 
 function getAppointmentDuration()
@@ -266,11 +335,83 @@ function savePatient()
 
 function saveAppointment()
 {
-	Swal.fire({
-		  icon: 'error',
-		  title: 'Oops...',
-		  text: 'Something went wrong!'
+	var name = $("#patient_name").val()
+	var surname = $("#patient_surname").val()
+	var patronimic = $("#patient_patronimic").val()
+	var birthday = $("#patient_birthday").val()
+	var phone = $("#patient_phone").val()
+	var date = $('#appointment_date').val()
+	var time = $('#appointment_time').val()
+	var duration = $('#appointment_duration').val()
+	var observation = $('#appointment_observation').val()
+
+	if(date == "" || time == "")
+	{
+      alertMessages('warning', 'Запольните все данные!', 'Внимание')
+	}
+	else
+	{
+		var procedures_table = []
+
+			var table = document.getElementById("procedures_table")
+	
+			var rowCount = CountRows()
+			var i = rowCount + 1
+			
+			for (var j=1; j<i; j++)
+			{
+				var x= table.rows[j].cells;
+				var rowElements = []
+				for(var k = 1; k<table.rows[j].cells.length-1; k++)
+				{
+					rowElements.push(x[k].innerHTML) 
+				}
+				procedures_table.push(rowElements)
+			}
+
+			var jsonString = JSON.stringify(procedures_table);
+
+		$.ajax({
+		    url: 'index.php?controller=Appointments&action=InsertAppointment',
+		    type: 'POST',
+		    data: {
+		    	patient_name:name,
+		    	patient_surname:surname,
+		    	patient_patronimic:patronimic,
+		    	patient_birthday:birthday,
+				patient_phone:phone,
+				appointment_date:date,
+				appointment_time:time,
+				appointment_duration:duration,
+				appointment_observation:observation,
+				procedure_table:jsonString
+
+		    },
 		})
+		.done(function(x) {
+			x=x.trim()
+			if (x.includes("success"))
+				{
+					x=x.split("|")
+					Swal.fire({
+						title: 'Готово',
+						text: "Запись успешно создана!",
+						icon: 'success',
+						showCancelButton: false,
+						confirmButtonColor: '#3085d6',
+						confirmButtonText: 'Удалить'
+					  }).then((result) => {
+						if (result.value) {
+							window.location.href = "index.php?controller=ShowAppointments&action=load_especific_appointment&cita="+x[1];
+						}
+										
+				})	
+			}
+		})
+		.fail(function() {
+		    console.log("error");
+		});
+	}
 }
 
 function cancelPatient()
@@ -699,7 +840,7 @@ function addProcedureZone()
  Swal.fire({
 	  icon: 'warning',
 	  title: 'Внимание',
-	  text: 'Выверите зону'
+	  text: 'Выверите зону или препарат'
 	})
  }
 else
@@ -1145,4 +1286,13 @@ function cleanProceduresTable()
 	{
 		table.deleteRow(1);
 	}
+}
+
+function alertMessages(tipo, mensaje, titulo)
+{
+	Swal.fire({
+		  icon: tipo,
+		  title: titulo,
+		  text: mensaje
+		})
 }

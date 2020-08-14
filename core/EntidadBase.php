@@ -226,6 +226,19 @@ class EntidadBase{
     
     	return $resultSet;
     }
+
+    public function getSelect($query){
+    	
+    	$query=mysqli_query($this->con, "SELECT $query");
+    	//echo "SELECT $query";
+    	$resultSet = array();
+    	
+    	while ($row = mysqli_fetch_array($query)) {
+    		$resultSet[]=$row;
+    	}
+    
+    	return $resultSet;
+    }
     
     public function getCondicionesValorMayor($columnas ,$tablas , $where){
     	 

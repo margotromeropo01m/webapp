@@ -34,9 +34,27 @@
                     <strong class="d-inline-block mb-2 text-dark">Иванова Тамара Ивановна</strong>
                   </h3>
                   <div class="mb-2 text-dark">Июль 14 - 17:30</div>
-                  <p class="card-text mb-auto">Коментари к записи</p>                       
-                </div> 
-                <button class="btn btn-primary btn-sm float-right" type="button" onclick="EditAppoitment()">Подробнее <i class="fa fa-share"></i></button>                      
+                  <p class="card-text mb-auto">Коментари к записи</p>  
+                  <div class="wrapper col-md-12" >
+                    <div class="card" >
+                      <div class="card-header" id="headingOne">
+                        <h3 class="mb-0">
+                          Регистрация
+                          <button class="btn float-right" data-toggle="collapse" data-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
+                            <i class="fa fa-caret-square-o-up fa-lg"></i>
+                          </button>
+                        </h3>
+                      </div>
+                  
+                      <div id="collapseRegistration" class="collapse" aria-labelledby="headingRegistration">
+                        
+                        <div class="card-body multi-collapse">
+                         
+                        </div>
+                      </div>
+                    </div>
+                   </div>                     
+                </div>                       
               </div>
             </div>
            </div>

@@ -8,7 +8,9 @@ class AppointmentsController extends ControladorBase{
     public function index(){
         
         $pageName="Appointments";
-        $this->view("Appointments",array("pageName"=>$pageName));
+        $tabName="NewAppointment";
+
+        $this->view("Appointments",array("pageName"=>$pageName, "tabName"=>$tabName));
         
     }
 
@@ -271,14 +273,37 @@ class AppointmentsController extends ControladorBase{
     
     public function getAvailableHour() 
     {
+        /*$extras = new ExtrasModel();
+
         $procedure_table = json_decode(stripslashes($_POST['procedure_table']));
+        $appointment_date = $_POST['appointment_date'];
+        $appointment_duration = $_POST['appointment_duration'];
+
+        $columnas="citas.id_citas, citas.hora_citas";
+        $tablas="citas INNER JOIN estados
+                ON citas.id_estados = estados.id_estados";
+        $where="citas.fecha_citas ='".$appointment_date."' AND estados.nombre_estados='ACTIVO'";
+        $id="citas.id_citas";
+        $resultCitas=$extras->getCondiciones($columnas, $tablas, $where, $id);
+
+        foreach ($resultCitas as $citas)
+        {
+            $columnas="extra_procedimientos.id_procedimientos, extra_procedimientos.id_especificaciones_procedimientos
+                        extra_procedimientos.orden_extra_procedimientos";
+            $tablas="extra_procedimientos";
+            $where="id_citas =".$citas['id_citas'];
+            $id="extra_procedimientos.orden_extra_procedimientos";
+            $resultProcedimientos=$extras->getCondiciones($columnas, $tablas, $where, $id);
+        }
+
+
 
         foreach ($procedure_table as $procedure)
         {
             echo print_r($procedure) ;
-        }
+        }*/
         
-        /*$free="#82E0AA";
+        $free="#82E0AA";
         $warning  = "#F7DC6F";
         $busy = "#F1948A";
         $html = '<select id="appointment_time"  class="form-control" >
@@ -295,7 +320,138 @@ class AppointmentsController extends ControladorBase{
         }
         
         $html.='</select>';
-        echo $html;*/
+        echo $html;
+        
+    }
+
+    public function InsertAppointment()
+    {
+        $appointment = new ExtrasModel();
+        
+        $name = $_POST['patient_name'];
+        $surname = $_POST['patient_surname'];
+        $patronimic = $_POST['patient_patronimic'];
+        $birthday = $_POST['patient_birthday'];
+        $phone = $_POST['patient_phone'];
+        $date = $_POST['appointment_date'];
+        $time = $_POST['appointment_time'];
+        $duration = $_POST['appointment_duration'];
+        $observation = $_POST['appointment_observation'];
+        $table = json_decode(stripslashes($_POST['procedure_table']));
+       
+               
+        $columnas="id_pacientes";
+        $tablas="pacientes";
+        $where="imya_pacientes='".$name."' AND familia_pacientes='".$surname."' AND ochestvo_pacientes='".$patronimic."'AND telefon_pacientes='".$phone."' AND fecha_n_pacientes='".$birthday."'";
+        $id="id_pacientes";
+        $id_paciente=$appointment->getCondiciones($columnas, $tablas, $where, $id);
+
+        $id_paciente=$id_paciente[0]['id_pacientes'];
+
+        $columnas="id_estados";
+        $tablas="estados";
+        $where="tabla_estados='citas' AND nombre_estados = 'ACTIVO'";
+        $id="id_estados";
+        $id_estado=$appointment->getCondiciones($columnas, $tablas, $where, $id);
+
+        $id_estado=$id_estado[0]['id_estados'];
+                
+        $appointment->beginTran();
+        $selec_last_id=" `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'clinic_db' AND TABLE_NAME = 'citas'";
+                        $id_citas=$appointment->getSelect($selec_last_id);
+
+                        $id_citas=$id_citas[0]['AUTO_INCREMENT'];
+            
+            $query = "INSERT INTO citas (fecha_citas, hora_citas, duracion_citas, id_paciente_citas, id_estados, observacion_citas)
+                     VALUES ('".$date."','".$time."',".$duration.",".$id_paciente.",".$id_estado.", '".$observation."')";
+           
+            $resultInsert=$appointment->executeNonQuery($query);
+            $error = error_get_last();
+
+
+            if ($resultInsert != "1" || !empty($error))
+            {
+                $appointment->endTran("ROLLBACK");
+
+                echo "error ".$error;
+            }
+            else
+            {
+                        /*$columnas="id_citas";
+                        $tablas="citas INNER JOIN estados
+                                ON citas.id_estados = estados.id_estados";
+                        $where="fecha_citas=STR_TO_DATE('".$date."', '%d/%m/%Y') AND hora_citas='".$time."' AND duracion_citas = ".$duration." 
+                                AND id_paciente_citas = ".$id_paciente." AND estados.nombre_estados='ACTIVO'";
+                        $id="id_citas";
+                        $id_citas=$appointment->getCondiciones($columnas, $tablas, $where, $id);
+
+                        $id_citas=$id_citas[0]['id_citas'];*/
+                                       
+                foreach ($table as $procedures)
+                {
+                    $query ="";
+
+                    if ($procedures[2]=="")
+                    {
+                        $columnas="id_procedimientos";
+                        $tablas="procedimientos INNER JOIN estados
+                        ON procedimientos.id_estado_procedimientos = estados.id_estados";
+                        $where="nombre_procedimientos = '".$procedures[1]."' AND estados.nombre_estados='ACTIVO'";
+                        $id="id_procedimientos";
+                        $id_procedimiento=$appointment->getCondiciones($columnas, $tablas, $where, $id);
+                
+                        $id_procedimiento=$id_procedimiento[0]['id_procedimientos'];
+
+                        $query = "INSERT INTO extra_procedimientos (id_procedimientos, costo_extra_procedimientos, descuento_extra_procedimientos,
+                                                orden_extra_procedimientos, id_citas)
+                                VALUES (".$id_procedimiento.",".$procedures[4].",".$procedures[5].",".$procedures[0].",".$id_citas.")";
+           
+            
+                    }
+                    else
+                    {
+                        $columnas="especificaciones_procedimientos.id_procedimientos, especificaciones_procedimientos.id_especificaciones_procedimientos";
+                        $tablas="especificaciones_procedimientos INNER JOIN procedimientos 
+                                ON especificaciones_procedimientos.id_procedimientos = procedimientos.id_procedimientos";
+                        $where="especificaciones_procedimientos.nombre_especificaciones_procedimientos = '".$procedures[2]."' 
+                                AND procedimientos.nombre_procedimientos = '".$procedures[1]."'";
+                        $id="id_procedimientos";
+                        $result_id_procedimiento=$appointment->getCondiciones($columnas, $tablas, $where, $id);
+
+                        $id_procedimiento=$result_id_procedimiento[0]['id_procedimientos'];
+                        $id_especificacion_procedimiento=$result_id_procedimiento[0]['id_especificaciones_procedimientos'];
+
+                        $query = "INSERT INTO extra_procedimientos (id_procedimientos, id_especificacion_procedimientos, costo_extra_procedimientos, descuento_extra_procedimientos,
+                                                orden_extra_procedimientos, id_citas)
+                                VALUES (".$id_procedimiento.", ".$id_especificacion_procedimiento.", ".$procedures[4].",".$procedures[5].",".$procedures[0].",".$id_citas.")";
+                    }
+
+                    $resultInsert=$appointment->executeNonQuery($query);
+                    $error = error_get_last();
+
+                    if ($resultInsert != "1" || !empty($error))
+                        {
+                            $appointment->endTran("ROLLBACK");
+
+                            echo "error ";
+                            break;
+                        }
+                }
+                $error = error_get_last();
+
+                    if (!empty($error))
+                        {
+                            $appointment->endTran("ROLLBACK");
+
+                            echo "error";
+                        }
+                        else
+                        {
+                            $appointment->endTran("COMMIT");
+
+                            echo "success|".$id_citas;
+                        }
+            }
         
     }
     

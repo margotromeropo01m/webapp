@@ -10,10 +10,10 @@
 	<div class="container-fluid sticky-top sticky-offset bg-light">
 		<ul class="nav nav-tabs justify-content-center">
           <li class="nav-item">
-            <a class="nav-link active"><h3>Новая Запись</h3></a>
+            <a class="nav-link <?php if($tabName=="NewAppointment") echo "active"; else echo "text-muted"?>" href="index.php?controller=Appointments&action=index"><h3>Новая Запись</h3></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"><h3>Записи</h3></a>
+            <a class="nav-link <?php if($tabName=="ShowAppointment") echo "active"; else echo "text-muted"?>" href="index.php?controller=ShowAppointments&action=index"><h3>Записи</h3></a>
           </li>
         </ul>
 	</div>
@@ -100,16 +100,13 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-card">
-                                    <h2 class="fs-title text-center">Success !</h2> <br><br>
-                                    <div class="row justify-content-center">
-                                        <div class="col-3"> <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image"> </div>
-                                    </div> <br><br>
-                                    <div class="row justify-content-center">
-                                        <div class="col-7 text-center">
-                                            <h5>You Have Successfully Signed Up</h5>
-                                        </div>                                        
+                                    <h2 class="fs-title">Информация записи</h2>
+                                    <div id = "info_cita_final">
+                                        
                                     </div>
+                                    
                                 </div>
+                                <button type="button" class="previous btn btn-secondary" name="next">Назад</button>
                                 <button type="button" class="btn btn-primary" onclick="saveAppointment()">Создать Запись</button>
                             </fieldset>
                         </form>
@@ -147,6 +144,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/Appointments.js?0.14"></script>
+    <script src="view/js/Appointments.js?0.17"></script>
   </body>
 </html>

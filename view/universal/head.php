@@ -13,7 +13,7 @@
         top: 11%;
         }
         
-        <?php if ($pageName == "Appointments") {include("view/universal/appointments_css.php");}?>
+        <?php if ($pageName == "Appointments" && $tabName=="NewAppointment") {include("view/universal/appointments_css.php");}?>
         
 	</style>
     <title>ВИКТОРИЯ ЭСТЕТИК - ЦЕНТР</title>
