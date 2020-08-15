@@ -16,7 +16,7 @@
 		<div class="row">
             <div class="col-md-12">
               <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-white">
-                <div class="card-body d-flex flex-column align-items-start">
+                <div class="card-body d-flex flex-column align-items-start" id="next_appointment">
                   <strong class="d-inline-block mb-2 text-danger">Ближайшая запись <strong class="text-dark">Лазерная эпилация - Иванова Тамара Ивановна - Июль 14 - 17:30</strong></strong>
                 </div>            
               </div>
@@ -24,118 +24,8 @@
            </div>
 	</div>
 	<!-- Citas para hoy -->
-	<div class="container-fluid"  style="padding-top: 15px;">
-    	<div class="row">
-            <div class="col-md-12">
-              <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-light">
-                <div class="card-body d-flex flex-column align-items-start">
-                  <strong class="d-inline-block mb-2 text-primary">Лазерная эпилация</strong>
-                  <h3 class="mb-0">
-                    <strong class="d-inline-block mb-2 text-dark">Иванова Тамара Ивановна</strong>
-                  </h3>
-                  <div class="mb-2 text-dark">Июль 14 - 17:30</div>
-                  <p class="card-text mb-auto">Коментари к записи</p>  
-                  <div class="wrapper col-md-12" >
-                    <div class="card" >
-                      <div class="card-header" id="headingOne">
-                        <h3 class="mb-0">
-                          Регистрация
-                          <button class="btn float-right" data-toggle="collapse" data-target="#collapseRegistration" aria-expanded="false" aria-controls="collapseRegistration">
-                            <i class="fa fa-caret-square-o-up fa-lg"></i>
-                          </button>
-                        </h3>
-                      </div>
-                  
-                      <div id="collapseRegistration" class="collapse" aria-labelledby="headingRegistration">
-                        
-                        <div class="card-body multi-collapse">
-                         
-                        </div>
-                      </div>
-                    </div>
-                   </div>                     
-                </div>                       
-              </div>
-            </div>
-           </div>
-           <div class="row">
-            <div class="col-md-12">
-              <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-light">
-                <div class="card-body d-flex flex-column align-items-start">
-                  <strong class="d-inline-block mb-2 text-primary">Лазерная эпилация</strong>
-                  <h3 class="mb-0">
-                    <strong class="d-inline-block mb-2 text-dark">Иванова Тамара Ивановна</strong>
-                  </h3>
-                  <div class="mb-2 text-dark">Июль 14 - 17:30</div>
-                  <p class="card-text mb-auto">Коментари к записи</p>                       
-                </div> 
-                <button class="btn btn-primary btn-sm float-right" type="button" onclick="EditAppoitment()">Подробнее <i class="fa fa-share"></i></button>                      
-              </div>
-            </div>
-           </div>
-           <div class="row">
-            <div class="col-md-12">
-              <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-light">
-                <div class="card-body d-flex flex-column align-items-start">
-                  <strong class="d-inline-block mb-2 text-primary">Лазерная эпилация</strong>
-                  <h3 class="mb-0">
-                    <strong class="d-inline-block mb-2 text-dark">Иванова Тамара Ивановна</strong>
-                  </h3>
-                  <div class="mb-2 text-dark">Июль 14 - 17:30</div>
-                  <p class="card-text mb-auto">Коментари к записи</p>                       
-                </div> 
-                <button class="btn btn-primary btn-sm float-right" type="button" onclick="EditAppoitment()">Подробнее <i class="fa fa-share"></i></button>                      
-              </div>
-            </div>
-           </div>
-           <div class="row">
-            <div class="col-md-12">
-              <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-light">
-                <div class="card-body d-flex flex-column align-items-start">
-                  <strong class="d-inline-block mb-2 text-primary">Лазерная эпилация</strong>
-                  <h3 class="mb-0">
-                    <strong class="d-inline-block mb-2 text-dark">Иванова Тамара Ивановна</strong>
-                  </h3>
-                  <div class="mb-2 text-dark">Июль 14 - 17:30</div>
-                  <p class="card-text mb-auto">Коментари к записи</p>                       
-                </div> 
-                <button class="btn btn-primary btn-sm float-right" type="button" onclick="EditAppoitment()">Подробнее <i class="fa fa-share"></i></button>                      
-              </div>
-            </div>
-           </div>
-           <div class="row">
-            <div class="col-md-12">
-              <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-light">
-                <div class="card-body d-flex flex-column align-items-start">
-                  <strong class="d-inline-block mb-2 text-primary">Лазерная эпилация</strong>
-                  <h3 class="mb-0">
-                    <strong class="d-inline-block mb-2 text-dark">Иванова Тамара Ивановна</strong>
-                  </h3>
-                  <div class="mb-2 text-dark">Июль 14 - 17:30</div>
-                  <p class="card-text mb-auto">Коментари к записи</p>                       
-                </div> 
-                <button class="btn btn-primary btn-sm float-right" type="button" onclick="EditAppoitment()">Подробнее <i class="fa fa-share"></i></button>                      
-              </div>
-            </div>
-           </div>
-           <div class="row">
-            <div class="col-md-12">
-              <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-light">
-                <div class="card-body d-flex flex-column align-items-start">
-                  <strong class="d-inline-block mb-2 text-primary">Лазерная эпилация</strong>
-                  <h3 class="mb-0">
-                    <strong class="d-inline-block mb-2 text-dark">Иванова Тамара Ивановна</strong>
-                  </h3>
-                  <div class="mb-2 text-dark">Июль 14 - 17:30</div>
-                  <p class="card-text mb-auto">Коментари к записи</p>                       
-                </div> 
-                <button class="btn btn-primary btn-sm float-right" type="button" onclick="EditAppoitment()">Подробнее <i class="fa fa-share"></i></button>                      
-              </div>
-            </div>
-           </div>
-          
-           
-          
+	<div class="container-fluid col-md-10" id="citas_hoy" style="padding-top: 15px;">
+    	
 	</div>
 
     <!-- Optional JavaScript -->
@@ -143,5 +33,6 @@
     <script src="bootstrap/jquery-3.5.1.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="view/js/MainPage.js?0.2"></script>
   </body>
 </html>

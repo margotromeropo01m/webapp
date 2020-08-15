@@ -402,7 +402,7 @@ function saveAppointment()
 						confirmButtonText: 'Удалить'
 					  }).then((result) => {
 						if (result.value) {
-							window.location.href = "index.php?controller=ShowAppointments&action=load_especific_appointment&cita="+x[1];
+							window.location.href = "index.php?controller=ShowAppointments&action=load_specific_appointment&cita="+x[1];
 						}
 										
 				})	

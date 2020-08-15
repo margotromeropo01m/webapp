@@ -25,14 +25,14 @@
              </div>
              <div class="col-xs-6 col-md-3 col-lg-3 ">
               <div class="form-group">
-                     <select id="procedure_type_search"  class="form-control" onchange="getAppointments()">
+                     <select id="type_search"  class="form-control" onchange="loadAppointmentsTable()">
                          <option value="" selected="selected">--Выбрать вид:--</option>		
             </select> 
                  </div>
              </div>
              <div class="col-xs-6 col-md-3 col-lg-3 ">
               <div class="form-group">
-                    <input type="date" class="form-control" id="search_procedure" value="" onchange="getAppointments()">
+                    <input type="date" class="form-control" id="search_date" value="" onchange="loadAppointmentsTable()">
                  </div>
              </div>
         </div>
@@ -75,6 +75,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/ShowAppointments.js?0.1"></script>
+    <script src="view/js/ShowAppointments.js?0.5"></script>
   </body>
 </html>
