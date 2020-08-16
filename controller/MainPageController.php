@@ -35,6 +35,70 @@ class MainPageController extends ControladorBase{
         return $newFormat;
     }
 
+    public function LoadNext()
+    {
+        $extras = new ExtrasModel();
+
+        $hoy = date("Y-m-d");
+
+        $now = date("H:i");
+        
+        $select="id_citas
+        FROM citas INNER JOIN estados
+        ON citas.id_estados = estados.id_estados
+        WHERE fecha_citas='".$hoy."' AND hora_citas >= '".$now."' AND estados.nombre_estados='ACTIVO'
+        ORDER BY hora_citas ASC
+        LIMIT 1;";
+
+        $resultSet = $extras->getSelect($select);
+
+        $message="";
+
+        if (!empty($resultSet))
+        {
+
+            $columnas = "pacientes.familia_pacientes, 
+            pacientes.imya_pacientes, 
+            pacientes.ochestvo_pacientes, 
+            citas.hora_citas, citas.fecha_citas, 
+            citas.observacion_citas, 
+            extra_procedimientos.id_procedimientos, 
+            extra_procedimientos.id_especificacion_procedimientos, 
+            extra_procedimientos.costo_extra_procedimientos, 
+            extra_procedimientos.descuento_extra_procedimientos, 
+            extra_procedimientos.orden_extra_procedimientos";
+    $tablas = "citas INNER JOIN estados 
+            ON citas.id_estados= estados.id_estados 
+            INNER JOIN pacientes 
+            ON citas.id_paciente_citas = pacientes.id_pacientes 
+            INNER JOIN extra_procedimientos 
+            ON extra_procedimientos.id_citas = citas.id_citas";
+    $where = "estados.nombre_estados = 'ACTIVO' AND citas.id_citas=".$resultSet[0]['id_citas'];
+    $id = "citas.id_citas";
+
+    $info_cita = $extras->getCondiciones($columnas, $tablas, $where, $id);
+    $fecha_hoy=$this->getDateFormat($hoy);
+
+    $message = '<strong class="d-inline-block mb-2 text-danger">
+    Ближайшая запись 
+    <strong class="text-dark col-md-12">'.$info_cita[0]['familia_pacientes'].' '.$info_cita[0]['imya_pacientes'].' '.$info_cita[0]['ochestvo_pacientes'].'
+    - '.$fecha_hoy.' - '.$info_cita[0]['hora_citas'].'</strong>
+    
+    ';
+    $message.='<button type="button" class="btn btn-dark float-right" onclick="showAppointment('.$resultSet[0]['id_citas'].')"><i class="fa fa-share"></i></button></strong>';
+
+   
+        }
+        else
+        {
+            $message='<strong class="d-inline-block mb-2 text-warning">
+            Нет записей 
+            </strong>';
+        }
+        echo $message;
+       
+    }
+
     public function LoadToday()
     {
         $appointments = new ExtrasModel();
@@ -176,7 +240,7 @@ class MainPageController extends ControladorBase{
             $html.='<div class="col-lg-12 col-md-12 col-xs-12">';
             $html.='<div class="alert alert-warning alert-dismissable" style="margin-top:40px;">';
             $html.='<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-            $html.='<h4>Внимание!</h4> <b>Нет результатов по вашему запросу</b>';
+            $html.='<h4>Внимание!</h4> <b>Нет больше записей на сегодня</b>';
             $html.='</div>';
             $html.='</div>';
             

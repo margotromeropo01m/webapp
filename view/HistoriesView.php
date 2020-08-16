@@ -10,11 +10,11 @@
 	<div class="container-fluid sticky-top sticky-offset bg-light">
 		<ul class="nav nav-tabs justify-content-center">
             <li class="nav-item">
-                <a class="nav-link <?php if($tabName=="NewAppointment") echo "active"; else echo "text-muted"?>" href="index.php?controller=Appointments&action=index"><h3>Новая Запись</h3></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link <?php if($tabName=="ShowAppointment") echo "active"; else echo "text-muted"?>" href="index.php?controller=ShowAppointments&action=index"><h3>Записи</h3></a>
-              </li>
+            <a class="nav-link <?php if($tabName=="Patients") echo "active"; else echo "text-muted"?>" href="index.php?controller=Patients&action=index"><h3>Пациенты</h3></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <?php if($tabName=="Histories") echo "active"; else echo "text-muted"?>" href="index.php?controller=Histories&action=index"><h3>Истории</h3></a>
+          </li>
         </ul>
         <div class="row" style="padding-top: 10px;">
           <div class="col-xs-6 col-md-3 col-lg-3 text-left">
@@ -24,16 +24,15 @@
               
              </div>
              <div class="col-xs-6 col-md-3 col-lg-3 ">
-              <div class="form-group">
-                     <select id="type_search"  class="form-control" onchange="loadAppointmentsTable()">
-                         <option value="" selected="selected">--Выбрать вид:--</option>		
-            </select> 
-                 </div>
+             
              </div>
              <div class="col-xs-6 col-md-3 col-lg-3 ">
               <div class="form-group">
-                    <input type="date" class="form-control" id="search_date" value="" onchange="loadAppointmentsTable()">
-                 </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="search_patient" value=""  placeholder="Пойск">
+                    <button type="button" class="btn btn-dark" onclick="searchPatient()"><i class="fa fa-search"></i></button>
+                </div>
+             </div>
              </div>
         </div>
 	</div>

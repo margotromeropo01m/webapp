@@ -26,3 +26,20 @@ function showAppointment(id_cita)
 {
     window.location.href = "index.php?controller=ShowAppointments&action=load_specific_appointment&cita="+id_cita
 }
+
+function loadNextAppointment()
+{
+	$.ajax({
+		url: 'index.php?controller=MainPage&action=LoadNext',
+		type: 'POST',
+		data: {},
+	})
+	.done(function(x) {
+		
+		$("#next_appointment").html(x)
+
+	})
+	.fail(function() {
+		console.log("error");
+	});
+}

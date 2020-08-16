@@ -265,7 +265,8 @@ function savePatient()
  var patronimic = $("#patient_patronimic").val()
  var birthday = $("#patient_birthday").val()
  var phone = $("#patient_phone").val()
- 
+ var observation="";
+
  if(name=="" || surname=="" || patronimic=="" ||
 		 birthday=="" || phone=="")
 	 {
@@ -285,7 +286,8 @@ function savePatient()
 		    	patient_surname:surname,
 		    	patient_patronimic:patronimic,
 		    	patient_birthday:birthday,
-		    	patient_phone:phone
+				patient_phone:phone,
+				patient_observation:observation
 		    },
 		})
 		.done(function(x) {

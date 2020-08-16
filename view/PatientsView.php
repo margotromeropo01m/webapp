@@ -76,6 +76,12 @@
                  </div>
             </div>
             <div class="row">
+            	<div class="col">
+            		<label class="control-label">Примечания :</label>
+                <textarea  type="text" class="form-control" rows="3" maxlength="255" id="patient-observation" value=""  placeholder="Примечания"></textarea>
+            	</div>	
+           	</div>
+            <div class="row" style="padding-top: 1%;">
             	<div class="col text-center">
             		<button type="button" class="btn btn-primary" onclick="savePatient()">Сохранить</button>
             		<button type="button" class="btn btn-danger" onclick="cancelPatient()">Отменить</button>
@@ -100,7 +106,9 @@
           <div class="card-body multi-collapse">
             <div class="row">
             	<div class="col-xs-6 col-md-3 col-lg-3 ">
-                	
+                <div id="edit_button">
+                  <button type="button" class="btn btn-warning" onclick="editTable()"><i class="fa fa-pencil"></i></button>
+                </div>
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	
@@ -110,7 +118,7 @@
                  </div>
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
-                        <input type="text" class="form-control" id="patientSearch" name="cedula_usuarios" value="" onkeyup="loadPatients(1)"  placeholder="Пойск">
+                        <input type="text" class="form-control" id="patientSearch" value="" onkeyup="loadPatients(1)"  placeholder="Пойск">
                      </div>
                  </div>
             </div>
@@ -124,12 +132,32 @@
       </div>
      </div>
 
+     <!-- Modal -->
+     <div class="modal fade" id="patient_settings" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Новые данные</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="settings_modal">
+          </div>
+          <div class="modal-footer" id="settings_footer">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="bootstrap/jquery-3.5.1.min.js"></script>
     <script src="bootstrap/jquery.mask.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="view/js/Patients.js?0.7"></script>
+    <script type="text/javascript" src="bootstrap/swal.js"></script>
+    <script src="view/js/Patients.js?0.10"></script>
   </body>
 </html>

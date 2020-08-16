@@ -40,7 +40,31 @@ class ShowAppointmentsController extends ControladorBase{
         $resultInsert=$procedures->executeNonQuery($query);
         
         echo $resultInsert;
+    }
+
+    public function payAppointment()
+    {
+        $procedures = new ProceduresModel();
         
+        $columnas = "id_estados";
+        
+        $tablas = "estados";
+        
+        $where    = "estados.nombre_estados='PAGADO' AND tabla_estados='citas'";
+        
+        $id       = "id_estados";
+        
+        $resultSet=$procedures->getCondiciones($columnas, $tablas, $where, $id);
+        
+        $id_cita = $_POST['id_cita'];
+        
+        $query = "UPDATE citas
+                  SET id_estados=".$resultSet[0]['id_estados']."
+                  WHERE id_citas=".$id_cita;
+        
+        $resultInsert=$procedures->executeNonQuery($query);
+        
+        echo $resultInsert;
     }
 
     public function load_specific_appointment(){
@@ -231,7 +255,7 @@ class ShowAppointmentsController extends ControladorBase{
                     ON citas.id_estados= estados.id_estados";
                     if (empty($search_type))  $where = "estados.nombre_estados = 'ACTIVO'";
                     else $where ="estados.id_estados=".$search_type;
-        $id = "citas.id_citas";
+        $id = "citas.fecha_citas, citas.hora_citas";
 
         if(!empty($search_date))
         {
@@ -262,8 +286,10 @@ class ShowAppointmentsController extends ControladorBase{
                         ON citas.id_paciente_citas = pacientes.id_pacientes 
                         INNER JOIN extra_procedimientos 
                         ON extra_procedimientos.id_citas = citas.id_citas";
-                $where = "estados.nombre_estados = 'ACTIVO' AND citas.id_citas=".$res['id_citas'];
-                $id = "citas.id_citas";
+                        if (empty($search_type))  $where = "estados.nombre_estados = 'ACTIVO' AND citas.id_citas=".$res['id_citas'];
+                    else $where ="estados.id_estados=".$search_type." AND citas.id_citas=".$res['id_citas'];
+                
+                $id = "citas.fecha_citas";
 
                 $info_cita = $appointments->getCondiciones($columnas, $tablas, $where, $id);
                 $fecha = $this->getDateFormat($info_cita[0]['fecha_citas']);

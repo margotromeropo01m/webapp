@@ -81,3 +81,88 @@ function loadAppointmentsTable()
         console.log("error");
     });
 }
+
+function cancelAppointment(id_cita)
+{
+    Swal.fire({
+        title: 'Отменение запись',
+        text: "Вы дейсвительно хотите отменить данную запись?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Отменить'
+      }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: 'index.php?controller=ShowAppointments&action=CancelAppointment',
+                type: 'POST',
+                data: {id_cita:id_cita
+                },
+            })
+            .done(function(x) {
+                if (x==1)
+                {
+                    alertMessages('success','Запись отменена','Готово')
+                    loadAppointmentsTable()
+                }
+                else
+                {
+                    alertMessages('error','Произошла ошибка: '+x,'Ошибка')
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+        }
+      })
+    
+}
+
+function payAppointment(id_cita)
+{
+    Swal.fire({
+        title: 'Совершение запись',
+        text: "Вы дейсвительно хотите совершить данную запись?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Отменить'
+      }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: 'index.php?controller=ShowAppointments&action=payAppointment',
+                type: 'POST',
+                data: {id_cita:id_cita
+                },
+            })
+            .done(function(x) {
+                if (x==1)
+                {
+                    alertMessages('success','Запись совершена','Готово')
+                    loadAppointmentsTable()
+                }
+                else
+                {
+                    alertMessages('error','Произошла ошибка: '+x,'Ошибка')
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+        }
+      })
+    
+}
+
+function alertMessages(tipo, mensaje, titulo)
+{
+	Swal.fire({
+		  icon: tipo,
+		  title: titulo,
+		  text: mensaje
+		})
+}

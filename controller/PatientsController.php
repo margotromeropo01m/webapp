@@ -23,18 +23,19 @@ class PatientsController extends ControladorBase{
         $patronimic  = $_POST['patient_patronimic'];
         $birthday = $_POST['patient_birthday'];
         $phone = $_POST['patient_phone'];
+        $observation = $_POST['patient_observation'];
                
         $columnas="id_pacientes";
         $tablas="pacientes";
-        $where="imya_pacientes='".$name."' AND familia_pacientes='".$surname."' AND ochestvo_pacientes='".$patronimic."'AND telefon_pacientes='".$phone."' AND fecha_n_pacientes='".$birthday."'";
+        $where="telefon_pacientes='".$phone."'";
         $id="id_pacientes";
         $resultSet=$patients->getCondiciones($columnas, $tablas, $where, $id);
                 
         if (empty($resultSet))
         {
             
-            $query = "INSERT INTO pacientes (imya_pacientes, familia_pacientes, ochestvo_pacientes, telefon_pacientes, fecha_n_pacientes)
-                     VALUES ('".$name."','".$surname."','".$patronimic."','".$phone."','".$birthday."')";
+            $query = "INSERT INTO pacientes (imya_pacientes, familia_pacientes, ochestvo_pacientes, telefon_pacientes, fecha_n_pacientes, observacion_pacientes)
+                     VALUES ('".$name."','".$surname."','".$patronimic."','".$phone."','".$birthday."','".$observation."')";
            
             $resultInsert=$patients->executeNonQuery($query);
             
@@ -57,7 +58,8 @@ class PatientsController extends ControladorBase{
                      familia_pacientes,
                      ochestvo_pacientes,
                      telefon_pacientes,
-                     fecha_n_pacientes";
+                     fecha_n_pacientes,
+                     id_pacientes";
         
         $tablas = "pacientes";
         
@@ -116,6 +118,7 @@ class PatientsController extends ControladorBase{
                 $html.= "<thead>";
                 $html.= "<tr>";
                 $html.='<th></th>';
+                $html.='<th></th>';
                 $html.='<th>ФИО</th>';
                 $html.='<th>Телефон</th>';
                 $html.='<th>Дата Рождения</th>';
@@ -130,6 +133,129 @@ class PatientsController extends ControladorBase{
                 {
                     $i++;
                     $html.='<tr>';
+                    $html.='<td><button type="button" class="btn btn-light" onclick="seePatient('.$res['id_pacientes'].')"><i class="fa fa-eye"></i></button></td>';
+                    $html.='<td>'.$i.'</td>';
+                    $html.='<td>'.$res['familia_pacientes'].' '.$res['imya_pacientes'].' '.$res['ochestvo_pacientes'].'</td>';
+                    $html.='<td>'.$res['telefon_pacientes'].'</td>';
+                    $html.='<td>'.$res['fecha_n_pacientes'].'</td>';
+                    $html.='</tr>';
+                }
+                
+                
+                $html.='</tbody>';
+                $html.='</table>';
+                $html.='</section>';
+                $html.='</div>';
+                $html.='<div class="table-pagination pull-right">';
+                $html.=''. $this->paginate_patients("index.php", $page, $total_pages, $adjacents,"loadPatients").'';
+                $html.='</div>';
+                
+                
+                
+            }else{
+                $html.='<div class="col-lg-12 col-md-12 col-xs-12">';
+                $html.='<div class="alert alert-warning alert-dismissable" style="margin-top:40px;">';
+                $html.='<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
+                $html.='<h4>Внимание!</h4> <b>Нет результатов по вашему запросу</b>';
+                $html.='</div>';
+                $html.='</div>';
+            }
+            
+            
+            echo $html;
+            die();
+            
+        
+        
+    }
+
+    public function GetPatientsEditable(){
+        
+        
+        
+        $patients = new PatientsModel();
+       
+        $where_to="";
+        $columnas = "imya_pacientes,
+                     familia_pacientes,
+                     ochestvo_pacientes,
+                     telefon_pacientes,
+                     fecha_n_pacientes,
+                     id_pacientes";
+        
+        $tablas = "pacientes";
+        
+        
+        $where    = "1=1";
+        
+        $id       = "id_pacientes";
+        
+        
+        $search =  (isset($_POST['search'])&& $_POST['search'] !=NULL)?$_POST['search']:'';
+       
+            
+            
+            if(!empty($search)){
+                
+                
+                $where1=" AND (imya_pacientes LIKE '".$search."%' OR familia_pacientes LIKE '".$search."%' OR ochestvo_pacientes LIKE '".$search."%' OR telefon_pacientes LIKE '".$search."%' )";
+                
+                $where_to=$where.$where1;
+            }else{
+                
+                $where_to=$where;
+                
+            }
+            
+            $html="";
+            $resultSet=$patients->getCantidad("*", $tablas, $where_to);
+            $cantidadResult=(int)$resultSet[0]['total'];
+            
+            
+            $page = (isset($_POST['page']) && !empty($_POST['page']))?$_POST['page']:1;
+            
+            $per_page = 10; //la cantidad de registros que desea mostrar
+            $adjacents  = 9; //brecha entre páginas después de varios adyacentes
+            $offset = ($page - 1) * $per_page;
+            
+            $limit = " LIMIT   ".$per_page." OFFSET ".$offset;
+            
+            $resultSet=$patients->getCondicionesPag($columnas, $tablas, $where_to, $id, $limit);
+            $count_query   = $cantidadResult;
+            $total_pages = ceil($cantidadResult/$per_page);
+            
+            
+            if($cantidadResult>0)
+            {
+                
+                $html.='<div class="card float-right w-20">';
+                $html.='<div class="card body">';
+                //$html.='<div class="col-xs-6 col-md-3 col-lg-3 ">';
+                $html.='<span class="form-control"><strong>Найдено: </strong>'.$cantidadResult.'</span>';
+                $html.='</div>';
+                $html.='</div>';
+                $html.='<div class="col-lg-12 col-md-12 col-xs-12">';
+                $html.='<section>';
+                $html.= "<table id='patients_table_show' class='table table-striped'>";
+                $html.= "<thead>";
+                $html.= "<tr>";
+                $html.='<th></th>';
+                $html.='<th></th>';
+                $html.='<th>ФИО</th>';
+                $html.='<th>Телефон</th>';
+                $html.='<th>Дата Рождения</th>';
+                $html.='</tr>';
+                $html.='</thead>';
+                $html.='<tbody>';
+                
+                
+                $i=0;
+                
+                foreach ($resultSet as $res)
+                {
+                    $i++;
+                    $html.='<tr>';
+                    $html.='<td><button type="button" class="btn btn-light" onclick="editPatient('.$res['id_pacientes'].')"><i class="fa fa-pencil"></i></button></td>';
                     $html.='<td>'.$i.'</td>';
                     $html.='<td>'.$res['familia_pacientes'].' '.$res['imya_pacientes'].' '.$res['ochestvo_pacientes'].'</td>';
                     $html.='<td>'.$res['telefon_pacientes'].'</td>';
@@ -227,6 +353,62 @@ class PatientsController extends ControladorBase{
         
         $out.= "</ul>";
         return $out;
+    }
+
+    public function getPatientInfo()
+    {
+        $procedures = new ProceduresModel();
+        $patient_id =  $_POST['patient_id'];
+        
+        $columnas="*";
+        $tablas="pacientes";
+        $where="id_pacientes = ".$patient_id;
+        $id="id_pacientes";
+        $resultSet=$procedures->getCondiciones($columnas, $tablas, $where, $id);
+        
+        echo json_encode($resultSet);
+    }
+
+    public function UpdatePatient()
+    {
+        $patients = new ProceduresModel();
+        
+        $patient_id=$_POST['patient_id'];
+        $name = $_POST['patient_name'];
+        $surname  = $_POST['patient_surname'];
+        $patronimic  = $_POST['patient_patronimic'];
+        $birthday = $_POST['patient_birthday'];
+        $phone = $_POST['patient_phone'];
+        $observation = $_POST['patient_observation'];
+               
+        $columnas="id_pacientes";
+        $tablas="pacientes";
+        $where="telefon_pacientes='".$phone."' AND id_pacientes <> ".$patient_id;
+        $id="id_pacientes";
+        $resultSet=$patients->getCondiciones($columnas, $tablas, $where, $id);
+                
+        if (empty($resultSet))
+        {
+            
+            $query = "UPDATE pacientes 
+                    SET imya_pacientes='".$name."',
+                         familia_pacientes='".$surname."',
+                         ochestvo_pacientes='".$patronimic."', 
+                         telefon_pacientes='".$phone."',
+                         fecha_n_pacientes='".$birthday."', 
+                         observacion_pacientes='".$observation."'
+                    WHERE id_pacientes=".$patient_id;
+           
+            $resultInsert=$patients->executeNonQuery($query);
+            
+            echo $resultInsert;
+        }
+        else
+        {
+            echo "Телефон уже зарегистрирован!";
+        }
+        
+        
     }
 }
 ?>

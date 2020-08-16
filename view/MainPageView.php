@@ -17,7 +17,7 @@
             <div class="col-md-12">
               <div class="card flex-md-row mb-4 box-shadow h-md-250 bg-white">
                 <div class="card-body d-flex flex-column align-items-start" id="next_appointment">
-                  <strong class="d-inline-block mb-2 text-danger">Ближайшая запись <strong class="text-dark">Лазерная эпилация - Иванова Тамара Ивановна - Июль 14 - 17:30</strong></strong>
+                  
                 </div>            
               </div>
             </div>
@@ -33,6 +33,6 @@
     <script src="bootstrap/jquery-3.5.1.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="view/js/MainPage.js?0.2"></script>
+    <script src="view/js/MainPage.js?0.3"></script>
   </body>
 </html>
