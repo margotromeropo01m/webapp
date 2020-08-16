@@ -14,6 +14,12 @@ class PreparatsController extends ControladorBase{
         
     }
     
+    public function Notfound()
+    {
+        echo '<script type="text/javascript">',
+        'window.location.href = "index.php?controller=NotFound&action=index"',
+        '</script>';
+    }
     
 }
 ?>

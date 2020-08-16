@@ -133,7 +133,7 @@ class PatientsController extends ControladorBase{
                 {
                     $i++;
                     $html.='<tr>';
-                    $html.='<td><button type="button" class="btn btn-light" onclick="seePatient('.$res['id_pacientes'].')"><i class="fa fa-eye"></i></button></td>';
+                    $html.='<td><button type="button" class="btn btn-light" onclick="seePatient('.$res['id_pacientes'].')"><i class="fa fa-share"></i></button></td>';
                     $html.='<td>'.$i.'</td>';
                     $html.='<td>'.$res['familia_pacientes'].' '.$res['imya_pacientes'].' '.$res['ochestvo_pacientes'].'</td>';
                     $html.='<td>'.$res['telefon_pacientes'].'</td>';
@@ -407,8 +407,14 @@ class PatientsController extends ControladorBase{
         {
             echo "Телефон уже зарегистрирован!";
         }
-        
-        
+                
+    }
+
+    public function Notfound()
+    {
+        echo '<script type="text/javascript">',
+        'window.location.href = "index.php?controller=NotFound&action=index"',
+        '</script>';
     }
 }
 ?>

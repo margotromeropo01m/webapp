@@ -29,18 +29,19 @@
              <div class="col-xs-6 col-md-3 col-lg-3 ">
               <div class="form-group">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="search_patient" value=""  placeholder="Пойск">
-                    <button type="button" class="btn btn-dark" onclick="searchPatient()"><i class="fa fa-search"></i></button>
+                    <input type="text" class="form-control" id="search_patient" value="" onkeyup="loadPatients()" placeholder="Пойск">
                 </div>
              </div>
              </div>
+        </div>
+        <div class="row" id="info_patient_story" style="padding-top: 5px;">
         </div>
 	</div>
 	<!-- Tabla de citas -->
 	
 	<div class="container-fluid" id="grad1" style="padding-top: 15px;">
     <div class="row justify-content-center mt-0">
-        <div id="tabla_citas" class = "text-center col-md-10">
+        <div id="tabla_pacientes" class = "text-center col-md-10">
           <p>Идет загрузка...</p>
           <img src="view/universal/loading.gif" alt="loading" style="width:35%;height:auto;">
         </div>
@@ -74,6 +75,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/ShowAppointments.js?0.6"></script>
+    <script src="view/js/Histories.js?0.2"></script>
   </body>
 </html>

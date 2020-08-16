@@ -40,6 +40,11 @@ function formatNumber(number)
 	return newFormat
 }
 
+function seePatient(id_patient)
+{
+	window.location.href = "index.php?controller=Histories&action=LoadSpecificHistory&patient="+id_patient;
+}
+
 function loadPatients(page)
 {
 	var search = $("#patientSearch").val()
@@ -149,6 +154,7 @@ function editPatient(id_patient)
 	
 	$("#settings_modal").html(set_fields)
 	$("#settings_footer").html(buttons)
+	$('#patient_new_phone').mask('+7-(000)-000-00-00')
 	
 	$.ajax({
 		    url: 'index.php?controller=Patients&action=getPatientInfo',
@@ -204,19 +210,26 @@ function changeTable()
 		 document.getElementById("patientSearch").onkeyup = function() {loadPatients(1)};
 }
 
-function editTable()
+function editTable(page)
 {
  var button_set = '<button type="button" class="btn btn-success" onclick="changeTable()"><i class="fa fa-check"></i></button>'
 	 $("#edit_button").html(button_set)
 	 var search = $("#patientSearch").val()
-	 document.getElementById("patientSearch").onkeyup = function() {editTable()};
+	 document.getElementById("patientSearch").onkeyup = function() {editTable(1)};
 	 
+	 var firstChar = search.charAt(0)
+	
+	if( firstChar <='9' && firstChar >='0') {
+      
+		search = formatNumber(search)
+	}
 	 
 	 $.ajax({
 		    url: 'index.php?controller=Patients&action=GetPatientsEditable',
 		    type: 'POST',
 		    data: {
-		    	search:search
+				search:search,
+				page:page
 		    },
 		})
 		.done(function(x) {
