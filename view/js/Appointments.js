@@ -401,7 +401,7 @@ function saveAppointment()
 						icon: 'success',
 						showCancelButton: false,
 						confirmButtonColor: '#3085d6',
-						confirmButtonText: 'Удалить'
+						confirmButtonText: 'OK'
 					  }).then((result) => {
 						if (result.value) {
 							window.location.href = "index.php?controller=ShowAppointments&action=load_specific_appointment&cita="+x[1];
@@ -641,10 +641,13 @@ function getAppointmentHours()
 			{
 				var x= table.rows[j].cells;
 				var rowElements = []
-				for(var k = 1; k<table.rows[j].cells.length-1; k++)
-				{
-					rowElements.push(x[k].innerHTML) 
-				}
+				
+					
+					if(x[2].innerHTML=="Лимфодренажная капсула") rowElements.push(1)
+					else if(x[2].innerHTML=="Прессотерапия") rowElements.push(2)
+					else rowElements.push(0)
+					rowElements.push(x[4].innerHTML) 
+				
 				procedures_table.push(rowElements)
 			}
 
@@ -661,7 +664,7 @@ function getAppointmentHours()
 		})
 		.done(function(x) {
 			
-			console.log(x)
+			//alertMessages('info', x, 'DEL CONTROLADOR')
 			$("#appointmet_time_section").html(x)
 			$("#appointment_time").val("")
 		})

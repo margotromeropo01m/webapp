@@ -10,13 +10,7 @@
 	<div class="container-fluid sticky-top sticky-offset bg-light">
 		<ul class="nav nav-tabs justify-content-center">
           <li class="nav-item">
-            <a class="nav-link active" href="#"><h3>За день</h3></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-muted" href="#"><h3>За месяц</h3></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-muted" href="#"><h3>За год</h3></a>
+            <a class="nav-link active" href="#"><h3>Отчеты</h3></a>
           </li>
         </ul>
 	</div>
@@ -28,5 +22,6 @@
     <script src="bootstrap/jquery-3.5.1.min.js"></script>
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="view/js/Reports.js?0.1"
   </body>
 </html>

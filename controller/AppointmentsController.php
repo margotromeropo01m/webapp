@@ -273,50 +273,141 @@ class AppointmentsController extends ControladorBase{
     
     public function getAvailableHour() 
     {
-        /*$extras = new ExtrasModel();
+        $extras = new ExtrasModel();
 
         $procedure_table = json_decode(stripslashes($_POST['procedure_table']));
-        $appointment_date = $_POST['appointment_date'];
-        $appointment_duration = $_POST['appointment_duration'];
+        $appointment_date = $_POST['selected_date'];
+        $procedimientos_dia = array();
 
         $columnas="citas.id_citas, citas.hora_citas";
         $tablas="citas INNER JOIN estados
                 ON citas.id_estados = estados.id_estados";
         $where="citas.fecha_citas ='".$appointment_date."' AND estados.nombre_estados='ACTIVO'";
-        $id="citas.id_citas";
+        $id="citas.hora_citas";
         $resultCitas=$extras->getCondiciones($columnas, $tablas, $where, $id);
 
         foreach ($resultCitas as $citas)
         {
-            $columnas="extra_procedimientos.id_procedimientos, extra_procedimientos.id_especificaciones_procedimientos
+            $columnas="extra_procedimientos.id_procedimientos, extra_procedimientos.id_especificacion_procedimientos,
                         extra_procedimientos.orden_extra_procedimientos";
             $tablas="extra_procedimientos";
             $where="id_citas =".$citas['id_citas'];
             $id="extra_procedimientos.orden_extra_procedimientos";
             $resultProcedimientos=$extras->getCondiciones($columnas, $tablas, $where, $id);
+            $starting_time = $citas['hora_citas'];
+            $starting_time=date('H:i', strtotime($starting_time));
+            foreach($resultProcedimientos as $procs)
+            {
+                if(empty($procs['id_especificacion_procedimientos']))
+                {
+                    $columnas="duracion_procedimientos";
+                    $tablas="procedimientos";
+                    $where="id_procedimientos =".$procs['id_procedimientos'];
+                    $id="id_procedimientos";
+                    $resultProcedimientos=$extras->getCondiciones($columnas, $tablas, $where, $id);
+                    
+                    for($i=0; $i<($resultProcedimientos[0]['duracion_procedimientos'])/30; $i++)
+                    {
+                        $endTime = strtotime("+30 minutes", strtotime($starting_time));
+                        if($procs['id_procedimientos']==4) $info_t_proc=array($starting_time, 1);
+                        else if($procs['id_procedimientos']==8) $info_t_proc=array($starting_time, 2);
+                        else $info_t_proc=array($starting_time, 0);
+                        $starting_time=date('H:i', $endTime);
+                        array_push($procedimientos_dia, $info_t_proc);
+                    }
+                    
+                }
+                else
+                {
+                    $columnas="duracion_especificaciones_procedimientos";
+                    $tablas="especificaciones_procedimientos";
+                    $where="id_especificaciones_procedimientos =".$procs['id_especificacion_procedimientos'];
+                    $id="id_especificaciones_procedimientos";
+                    $resultProcedimientos=$extras->getCondiciones($columnas, $tablas, $where, $id);
+                    for($i=0; $i<($resultProcedimientos[0]['duracion_especificaciones_procedimientos'])/30; $i++)
+                    {
+                        $endTime = strtotime("+30 minutes", strtotime($starting_time));
+                        $info_t_proc=array($starting_time, 0);
+                        $starting_time=date('H:i', $endTime);
+                        array_push($procedimientos_dia, $info_t_proc);
+                    }
+                    
+                }
+            }
+
         }
-
-
-
-        foreach ($procedure_table as $procedure)
-        {
-            echo print_r($procedure) ;
-        }*/
         
-        $free="#82E0AA";
-        $warning  = "#F7DC6F";
-        $busy = "#F1948A";
-        $html = '<select id="appointment_time"  class="form-control" >
-         			<option value="" selected="selected">--Выберите время--</option>';
+        $day_schedule = array();
+        
         $starting_time = "8:00";
-        $html.='<option value="'.$starting_time.'" selected="selected" style="background:'.$free.'">'.$starting_time.'</option>';
-        
-        while($starting_time != "19:30")
+        $finish_time = "19:30";
+        $limit_time = strtotime("+30 minutes", strtotime($finish_time));
+        $periodo = array($starting_time,-1);
+        array_push($day_schedule,$periodo);
+        while($starting_time != $finish_time)
         {
             $endTime = strtotime("+30 minutes", strtotime($starting_time));
-            $timeend=date('H:i', $endTime);
-            $html.='<option value="'.$timeend.'" selected="selected" style="background:'.$free.'">'.$timeend.'</option>';
-            $starting_time = $timeend;
+            $starting_time=date('H:i', $endTime);
+            $periodo = array($starting_time,-1);
+             array_push($day_schedule,$periodo);
+        }
+        
+        foreach ($day_schedule as $key => $field)
+        {
+            foreach ($procedimientos_dia as $prd1)
+            {
+                if($field[0]==$prd1[0])
+                {
+                    $day_schedule[$key][1] =$prd1[1];
+                }
+               
+            }
+        }
+
+        $to_schedule=array();
+        foreach ($procedure_table as $p)
+        {
+            for($i=0; $i<($p[1])/30; $i++)
+            {
+                $slot = array("",$p[0]);
+                array_push($to_schedule,$slot);
+            }
+        }
+
+        $html = '<select id="appointment_time"  class="form-control" >
+         			<option value="" selected="selected">--Выберите время--</option>';
+
+        foreach($day_schedule as $d)
+        {
+            $add_flag=1;
+            $time = $d[0];
+            
+          foreach($to_schedule as $key => $field)
+          {
+            
+            $to_schedule[$key][0]=$time;
+            $endtime = strtotime("+30 minutes", strtotime($time));
+            $time=date('H:i', $endtime);
+            
+            if(strtotime($time)> $limit_time) $add_flag=0;
+          }
+          
+          foreach($to_schedule as $slot)
+          {     
+              
+              foreach($day_schedule as $day1)
+              {
+                if($day1[0]==$slot[0])
+                {
+                    
+                    if ($day1[1]==$slot[1]) $add_flag=0;
+                }
+              }
+          }
+          if ($add_flag==1)
+          {
+            $html.='<option value="'.$d[0].'" selected="">'.$d[0].'</option>';
+          }
         }
         
         $html.='</select>';
