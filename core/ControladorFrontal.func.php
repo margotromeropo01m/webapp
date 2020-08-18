@@ -20,11 +20,20 @@ function cargarAccion($controllerObj,$action){
 }
 
 function lanzarAccion($controllerObj){
-    if(isset($_GET["action"]) && method_exists($controllerObj, $_GET["action"])){
-        cargarAccion($controllerObj, $_GET["action"]);
-    }else{
+    if (isset($_GET["controller"]))
+    {
+        if(isset($_GET["action"]) && method_exists($controllerObj, $_GET["action"])){
+            cargarAccion($controllerObj, $_GET["action"]);
+        }else{
+            if (method_exists($controllerObj, DEFAULT_ACTION)) cargarAccion($controllerObj, DEFAULT_ACTION);
+            else cargarAccion($controllerObj, NO_ACTION);
+        }
+    }
+    else
+    {
         cargarAccion($controllerObj, NO_ACTION);
     }
+    
 }
 
 ?>

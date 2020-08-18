@@ -7,7 +7,8 @@ class MainPageController extends ControladorBase{
     
     public function DueToday(){
         $pageName="MainPage";
-        $this->view("MainPage",array("pageName"=>$pageName));
+        $tabName="Today";
+        $this->view("MainPage",array("pageName"=>$pageName, "tabName"=>$tabName));
         
     }
 
@@ -41,8 +42,11 @@ class MainPageController extends ControladorBase{
 
         $hoy = date("Y-m-d");
 
+        
+
         $now = date("H:i");
         
+
         $select="id_citas
         FROM citas INNER JOIN estados
         ON citas.id_estados = estados.id_estados
@@ -109,7 +113,7 @@ class MainPageController extends ControladorBase{
         $tablas = "citas INNER JOIN estados 
                     ON citas.id_estados= estados.id_estados";
         $where ="citas.fecha_citas='".$hoy."' AND estados.nombre_estados='ACTIVO'";
-        $id = "citas.id_citas";
+        $id = "citas.fecha_citas, citas.hora_citas";
 
         if(!empty($search_date))
         {

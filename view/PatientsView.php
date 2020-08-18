@@ -158,6 +158,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/Patients.js?0.12"></script>
+    <script src="view/js/Patients.js?0.13"></script>
   </body>
 </html>

@@ -144,6 +144,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/Appointments.js?0.20"></script>
+    <script src="view/js/Appointments.js?0.21"></script>
   </body>
 </html>

@@ -61,7 +61,7 @@ function setProcedureSettings()
 	 
 	if (type != "3" && type != "5" && type != "")
 		{
-		var input = '<label for="procedure_name" class="control-label">Название продцедура:</label>'+
+		var input = '<label for="procedure_name" class="control-label">Название продцедуры:</label>'+
 					'<input type="text" class="form-control" id="procedure_name" value=""  placeholder="Название">'
 		
 		$("#procedure_name_div").html(input)
@@ -80,13 +80,13 @@ function setProcedureSettings()
 	else
 		{
 		
-		var input1 = '<label for="procedure_name" class="control-label">Название продцедура:</label>'+
+		var input1 = '<label for="procedure_name" class="control-label">Название продцедуры:</label>'+
 		'<input type="text" class="form-control" id="procedure_name" value=""  placeholder="Название">'
 		
-		var input2 = '<label for="procedure_cost" class="control-label">Стоитмость процедура:</label>'+
+		var input2 = '<label for="procedure_cost" class="control-label">Стоимость процедуры:</label>'+
 		'<input type="number" class="form-control" id="procedure_cost" value=""  placeholder="Стоитмость">'
 		
-		var input3 = '<label for="procedure_duration" class="control-label">Продолжительность процедура:</label>'+
+		var input3 = '<label for="procedure_duration" class="control-label">Продолжительность процедуры:</label>'+
 		'<input type="number" class="form-control" id="procedure_duration" value=""  placeholder="Продолжительность">'
 		
 		$("#procedure_name_div").html(input1)
@@ -248,7 +248,7 @@ function EditProcedureWOE(id_procedure)
 	
 	var set_fields = '<label class="control-label">Название:</label>'+
 						'<input type="text" class="form-control" id="procedure_new_name" placeholder="Название"/>'+
-						'<label class="control-label">Стоитмость:</label>'+
+						'<label class="control-label">Стоимость:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_cost" placeholder="Стоитмость"/>'+
 						'<label class="control-label">Продолжительность:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_duration" placeholder="Продолжительность"/>'
@@ -286,7 +286,7 @@ function EditExtra(id_procedure)
 	
 	var set_fields = '<label class="control-label">Название:</label>'+
 						'<input type="text" class="form-control" id="procedure_new_name" placeholder="Название"/>'+
-						'<label class="control-label">Стоитмость:</label>'+
+						'<label class="control-label">Стоимость:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_cost" placeholder="Стоитмость"/>'+
 						'<label class="control-label">Продолжительность:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_duration" placeholder="Продолжительность"/>'

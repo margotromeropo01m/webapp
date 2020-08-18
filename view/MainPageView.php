@@ -9,8 +9,11 @@
     <!-- Page tittle -->
 	<div class="container-fluid sticky-top sticky-offset bg-light">
 		<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+            <a class="nav-link <?php if($tabName=="Today") echo "active"; else echo "text-muted"?>" href="index.php?controller=MainPage&action=DueToday"><h3>На сегодня</h3></a>
+          </li>
           <li class="nav-item">
-            <a class="nav-link active" href="#"><h3>На сегодня</h3></a>
+            <a class="nav-link <?php if($tabName=="Tomorrow") echo "active"; else echo "text-muted"?>" href="index.php?controller=TomorrowPage&action=index"><h3>На завтра</h3></a>
           </li>
         </ul>
 		<div class="row">

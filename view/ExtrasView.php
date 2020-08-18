@@ -118,7 +118,7 @@
                  <div class="col-xs-6 col-md-3 col-lg-3 ">
                 	<div class="form-group">
                          <select id="procedure_type_search"  class="form-control" onchange="getProceduresTable()">
-                             <option value="" selected="selected">--Выбрать вид продцедура:--</option>		
+                             <option value="" selected="selected">--Выбрать вид продцедуры:--</option>		
     					  </select> 
                      </div>
                  </div>
@@ -163,6 +163,6 @@
     <script src="bootstrap/popper.min.js" ></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bootstrap/swal.js"></script>
-    <script src="view/js/Extras.js?0.5"></script>
+    <script src="view/js/Extras.js?0.7"></script>
   </body>
 </html>

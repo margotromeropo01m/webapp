@@ -17,27 +17,57 @@ $(document).ready(function () {
                 });
             
             getProcedures()
-            getProceduresTable()
+			getProceduresTable()
+			getProceduresType()
         });
+
+function getProceduresType()
+{
+	$.ajax({
+			url: 'index.php?controller=Procedures&action=GetProcedureType',
+			type: 'POST',
+			data: {},
+		})
+		.done(function(x) {
+			
+			x=JSON.parse(x)
+						
+			var select_search = document.getElementById('procedure_type_search')
+
+		for (var i = 0; i<x.length; i++){
+			var opt = document.createElement('option');
+			opt.value = x[i]['id_tipo_procedimientos'];
+			opt.innerHTML = x[i]['nombre_tipo_procedimientos'];
+			
+			select_search.appendChild(opt);
+		}
+			
+		})
+		.fail(function() {
+			console.log("error");
+		});
+}
 
 function getProceduresTable()
 {
-		var search = $("#search_procedure").val()
-				
-		$.ajax({
-		    url: 'index.php?controller=Procedures&action=GetProceduresTable',
-		    type: 'POST',
-		    data: {
-		    	search:search
-		    },
-		})
-		.done(function(x) {
-			x=x.trim()
-			$('#procedures_table').html(x)	
-		})
-		.fail(function() {
-		    console.log("error");
-		});
+	var search = $("#search_procedure").val()
+	var type = $("#procedure_type_search").val()
+	
+	$.ajax({
+		url: 'index.php?controller=Procedures&action=GetProceduresTable',
+		type: 'POST',
+		data: {
+			search:search,
+			type:type
+		},
+	})
+	.done(function(x) {
+		x=x.trim()
+		$('#procedures_table').html(x)	
+	})
+	.fail(function() {
+		console.log("error");
+	});
 }
 
 
@@ -82,7 +112,7 @@ function EditProcedureWOE(id_procedure)
 	
 	var set_fields = '<label class="control-label">Название:</label>'+
 						'<input type="text" class="form-control" id="procedure_new_name" placeholder="Название"/>'+
-						'<label class="control-label">Стоитмость:</label>'+
+						'<label class="control-label">Стоимость:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_cost" placeholder="Стоитмость"/>'+
 						'<label class="control-label">Продолжительность:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_duration" placeholder="Продолжительность"/>'
@@ -120,7 +150,7 @@ function EditExtra(id_procedure)
 	
 	var set_fields = '<label class="control-label">Название:</label>'+
 						'<input type="text" class="form-control" id="procedure_new_name" placeholder="Название"/>'+
-						'<label class="control-label">Стоитмость:</label>'+
+						'<label class="control-label">Стоимость:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_cost" placeholder="Стоитмость"/>'+
 						'<label class="control-label">Продолжительность:</label>'+
 						'<input type="number" class="form-control" id="procedure_new_duration" placeholder="Продолжительность"/>'
@@ -572,7 +602,7 @@ function getProcedureInfo()
      		var input_name='<label  class="control-label">Название дополнения:</label>'+
      		'<input type="text" class="form-control" id="extra_name" value=""  placeholder="Название">'
 
-     		var input_cost='<label  class="control-label">Стоитмость дополнения:</label>'+
+     		var input_cost='<label  class="control-label">Стоимость дополнения:</label>'+
      		'<input type="number" class="form-control" id="extra_cost" value=""  placeholder="Стоитмость">'
      		
      		var input_duration = '<label  class="control-label">Продолжительность дополнения:</label>'+

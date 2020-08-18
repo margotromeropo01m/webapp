@@ -104,7 +104,7 @@ class HistoriesController extends ControladorBase{
         $html_head.='<div class="row">';
         $html_head.='<div class="col-xs-6 col-md-8 col-lg-8 ">';
         $html_head.='<p class="card-text mb-auto"><strong>Примечания :</strong></p>';
-        $html_head.='<textarea  type="text" class="form-control" rows="3" maxlength="255" id="patient-observation" value="'.$res[0]['observacion_pacientes'].'"  readonly></textarea>';
+        $html_head.='<textarea  type="text" class="form-control" rows="3" maxlength="255" id="patient-observation" value="" readonly>'.$res[0]['observacion_pacientes'].'</textarea>';
         $html_head.='</div>';
         $html_head.='</div>';                    
         $html_head.='</div>';

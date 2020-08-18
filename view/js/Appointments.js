@@ -125,6 +125,11 @@ function fieldValidation(fieldName)
 			{
 				answer = true
 				getAppointmentDuration()
+				var date = $("#appointment_date").val()
+				if  (date)
+				{
+					getAppointmentHours()
+				}
 
 			}
 			console.log("procedure")
@@ -428,7 +433,10 @@ function searchPatient()
 {
 	var patient_input = '<input type="text" class="form-control" id="patientSearch" name="cedula_usuarios" value="" onkeyup="loadPatients(1)"  placeholder="Пойск">'+
 						'<div id="patients_table"></div>'+
-						'</div>'
+						'</div>'+
+						'<div id = "patient_buttons"class="col text-center">'+
+		            		'<button type="button" class="btn btn-warning" onclick="cancelPatient()">Очистить</button>'+
+		            	'</div>'
 	
 	$('#client_info_block').html(patient_input)
 					        
@@ -546,10 +554,11 @@ function findPatient(id_patient)
 					        '<input type="text" class="form-control" id="patient_patronimic" value="'+x[0]['ochestvo_pacientes']+'" readonly/>'+
 					        '<input type="text" class="form-control" id="patient_phone" value="'+x[0]['telefon_pacientes']+'" readonly/>'+
 					        '<label class="control-label">Дата рождения:</label>'+
-					        '<input type="date" class="form-control" id="patient_birthday" value="'+x[0]['fecha_n_pacientes']+'" readonly/>'+
-					        '<div id = "patient_buttons"class="col text-center">'+
+							'<input type="date" class="form-control" id="patient_birthday" value="'+x[0]['fecha_n_pacientes']+'" readonly/>'+
+							'<div id = "patient_buttons"class="col text-center">'+
 		            		'<button type="button" class="btn btn-warning" onclick="cancelPatient()">Очистить</button>'+
 		            		'</div>'
+					        
 		            		
 		            		$('#client_info_block').html(patient_input)
 				 
