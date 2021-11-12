@@ -6,9 +6,19 @@ class TomorrowPageController extends ControladorBase{
     }
     
     public function index(){
-        $pageName="MainPage";
-        $tabName="Tomorrow";
-        $this->view("TomorrowPage",array("pageName"=>$pageName, "tabName"=>$tabName));
+
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        { 
+            $pageName="MainPage";
+            $tabName="Tomorrow";
+            $this->view("TomorrowPage",array("pageName"=>$pageName, "tabName"=>$tabName));            
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
         
     }
 

@@ -6,11 +6,24 @@ class PatientsController extends ControladorBase{
     }
     
     public function index(){
+
         
-        $pageName="Patients";
-        $tabName="Patients";
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        { 
+            $pageName="Patients";
+            $tabName="Patients";
+            
+            $this->view("Patients",array("pageName"=>$pageName, "tabName"=>$tabName));
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
         
-        $this->view("Patients",array("pageName"=>$pageName, "tabName"=>$tabName));
+        
+        
         
     }
     

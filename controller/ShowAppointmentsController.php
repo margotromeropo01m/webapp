@@ -7,14 +7,29 @@ class ShowAppointmentsController extends ControladorBase{
     
     public function index(){
         
-        $pageName="Appointments";
-        $tabName="ShowAppointment";
 
-        $this->view("ShowAppointments",array("pageName"=>$pageName, "tabName"=>$tabName));
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        { 
+          
+            $pageName="Appointments";
+            $tabName="ShowAppointment";
+    
+            $this->view("ShowAppointments",array("pageName"=>$pageName, "tabName"=>$tabName));
+
+            echo '<script type="text/javascript">',
+            'loadAppointmentsTable()',
+            '</script>';
+
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
         
-        echo '<script type="text/javascript">',
-                'loadAppointmentsTable()',
-                '</script>';
+        
+       
     }
 
     public function CancelAppointment()

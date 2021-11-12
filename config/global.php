@@ -1,5 +1,5 @@
 <?php 
-define("DEFAULT_CONTROLLER", "MainPage");
-define("DEFAULT_ACTION", "DueToday");
+define("DEFAULT_CONTROLLER", "UserLogin");
+define("DEFAULT_ACTION", "Login");
 define("NO_ACTION","Notfound")
 ?>

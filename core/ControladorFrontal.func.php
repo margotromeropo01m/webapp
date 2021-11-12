@@ -31,7 +31,7 @@ function lanzarAccion($controllerObj){
     }
     else
     {
-        cargarAccion($controllerObj, NO_ACTION);
+        cargarAccion($controllerObj, DEFAULT_ACTION);
     }
     
 }

@@ -16,5 +16,5 @@
         <?php if ($pageName == "Appointments" && $tabName=="NewAppointment") {include("view/universal/appointments_css.php");}?>
         
 	</style>
-    <title>ВИКТОРИЯ ЭСТЕТИК - ЦЕНТР</title>
+    <title>MARGOT ЭСТЕТИК - ЦЕНТР</title>
   </head>

@@ -109,7 +109,7 @@ class ReportsController extends ControladorBase{
                        
         $header = '
         <table width="100%" style="border-bottom: 1px solid #000000; vertical-align: bottom; font-family: serif; font-size: 15pt; color: #000000;"><tr>
-        <td width="50%" align="left"><img src="view/universal/logo_doc.jpeg" width="175px" /></td>
+        <td width="50%" align="left"><img src="view/universal/logo_doc.jpg" width="175px" /></td>
         <td width="50%" style="text-align: center;"><span style="font-weight: bold;">Отчет от '.$fecha.'</span></td>
         </tr></table>';
                 

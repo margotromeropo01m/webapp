@@ -6,11 +6,22 @@ class AppointmentsController extends ControladorBase{
     }
     
     public function index(){
-        
-        $pageName="Appointments";
-        $tabName="NewAppointment";
 
-        $this->view("Appointments",array("pageName"=>$pageName, "tabName"=>$tabName));
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        {
+            $pageName="Appointments";
+            $tabName="NewAppointment";
+    
+            $this->view("Appointments",array("pageName"=>$pageName, "tabName"=>$tabName));
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
+        
+       
         
     }
 

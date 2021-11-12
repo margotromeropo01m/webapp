@@ -7,10 +7,21 @@ class PreparatsController extends ControladorBase{
     
     public function index(){
         
+
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        { 
+          
         $pageName="Procedures";
         $tabName="Preparats";
         
         $this->view("Preparats",array("pageName"=>$pageName, "tabName"=>$tabName));
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
         
     }
     

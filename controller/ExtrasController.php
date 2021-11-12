@@ -7,10 +7,22 @@ class ExtrasController extends ControladorBase{
     
     public function index(){
         
-        $pageName="Procedures";
-        $tabName="Extras";
+
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        {
+            $pageName="Procedures";
+             $tabName="Extras";
         
         $this->view("Extras",array("pageName"=>$pageName, "tabName"=>$tabName));
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
+        
+        
         
     }
     

@@ -316,3 +316,22 @@ function updatePatient(id_patient)
 		}
 	
 }
+
+function salirSesion()
+{
+  $.ajax({
+    url: 'index.php?controller=UserLogin&action=SalirSesion',
+    type: 'POST',
+    data: {
+    },
+})
+.done(function(x) {
+
+      window.location.href = "index.php?controller=UserLogin&action=index"
+})
+.fail(function() {
+    console.log("error");
+});
+
+}
+

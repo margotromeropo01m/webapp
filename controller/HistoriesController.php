@@ -6,15 +6,25 @@ class HistoriesController extends ControladorBase{
     }
     
     public function index(){
-        
-        $pageName="Patients";
-        $tabName="Histories";
-        
-        $this->view("Histories",array("pageName"=>$pageName, "tabName"=>$tabName));
 
-        echo '<script type="text/javascript">',
-                'loadPatients()',
-                '</script>';
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        { $pageName="Patients";
+            $tabName="Histories";
+            
+            $this->view("Histories",array("pageName"=>$pageName, "tabName"=>$tabName));
+    
+            echo '<script type="text/javascript">',
+                    'loadPatients()',
+                    '</script>';
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
+        
+       
     }
     
     public function getDateFormat($date)

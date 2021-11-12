@@ -7,8 +7,19 @@ class NotFoundController extends ControladorBase{
     
     public function index(){
         
+
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        { 
+            $this->view("NotFound",array());
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
         
-        $this->view("NotFound",array());
+        
         
     }
     

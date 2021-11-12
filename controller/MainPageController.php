@@ -6,9 +6,21 @@ class MainPageController extends ControladorBase{
     }
     
     public function DueToday(){
-        $pageName="MainPage";
+
+        session_start();
+        if(isset($_SESSION['id_usuario']))
+        { 
+            $pageName="MainPage";
         $tabName="Today";
         $this->view("MainPage",array("pageName"=>$pageName, "tabName"=>$tabName));
+        }
+        else
+        {
+            $pageName="UserLogin";
+            $this->view("UserLogin",array("pageName"=>$pageName));
+        }
+        
+        
         
     }
 
